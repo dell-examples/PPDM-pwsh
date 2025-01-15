@@ -234,7 +234,7 @@ Function Start-PPDMupgradePrecheck {
     Process {
         switch ($PsCmdlet.ParameterSetName) {
             'byID' {
-                $URI = "upgrade-packages/$ID"
+                $URI = "upgrade-packages/$ID/precheck"
             }
         }  
         $Parameters = @{

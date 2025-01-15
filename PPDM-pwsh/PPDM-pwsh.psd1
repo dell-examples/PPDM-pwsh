@@ -12,7 +12,7 @@
 RootModule = 'PPDM-pwsh.psm1'
 
 # Version number of this module.
-ModuleVersion = '19.15.0'
+ModuleVersion = '19.17.0'
 
 # Supported PSEditions
 # CompatiblePSEditions = @()
@@ -27,7 +27,7 @@ Author = 'karsten.bott@dell.com'
 CompanyName = 'Private build by individual'
 
 # Copyright statement for this module
-Copyright = '(c) 2023 karsten.bott@dell.com. All rights reserved.'
+Copyright = '(c) 2025 karsten.bott@dell.com. All rights reserved.'
 
 # Description of the functionality provided by this module
 Description = 'Powershell Module to interact with the PowerProdect Data Manager (PPDM) API'
@@ -99,7 +99,8 @@ NestedModules = @(
     './modules/whitelist',
     './modules/exported-copies',
     './modules/reporting',
-    './modules/account'
+    './modules/account',
+    './modules/search'
 )
 
 # Functions to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no functions to export.
@@ -117,7 +118,6 @@ FunctionsToExport = @(
     'Unblock-PPDMSSLCerts',
     'Update-PPDMAccessToken',
     'Invoke-PPDMapirequest',
-#    'Start-PPDMasset_backups',
     'Get-PPDMprotection_engines',
     'Get-PPDMprotectionEngineProxies',
     'New-PPDMProtectionEngineProxy'
@@ -171,7 +171,6 @@ FunctionsToExport = @(
     'New-PPDMcredentials',
     'Remove-PPDMcredentials',
     'Update-PPDMcredentials',
-   # 'Get-PPDMagents_list',
     'Get-PPDMagent_registration_status',
     'Get-PPDMalerts',
     'Set-PPDMalerts_acknowledgement',
@@ -232,6 +231,7 @@ FunctionsToExport = @(
     'Restore-PPDMK8Scopies',
     'Get-PPDMupgrade_packages',
     'Stop-PPDMupgrade',
+    'Start-PPDMupgradePrecheck',
     'Get-PPDMPasswordPolicies',
     'Set-PPDMPasswordPolicies',
     'Remove-PPDMcdrs',
@@ -286,6 +286,7 @@ FunctionsToExport = @(
     'Get-PPDMmfa_bypass_accounts',
     'Remove-PPDMmfa_bypass_accounts',
     'Get-PPDMvcenterDatacenters',
+    'Get-PPDMvcenterDatastores',
     'Get-PPDMvcenterMorefs',
     'Get-PPDMService_Level_Agreements',
     'New-PPDMBackupService_Level_Agreements',
@@ -313,7 +314,10 @@ FunctionsToExport = @(
     'Get-PPDMreport',  
     'Request-PPDMreport'
     'Remove-PPDMService_Level_Agreements',
-    'Set-PPDMuserpassword'
+    'Set-PPDMuserpassword',
+    'Get-PPDMsearch_clusters',
+    'New-PPDMsearch_nodes',
+    'Get-PPDMsearch_nodes'
     )
 
 # Cmdlets to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no cmdlets to export.
@@ -391,6 +395,7 @@ PrivateData = @{
 
         # ReleaseNotes of this module
         ReleaseNotes = '
+        2025-01-01 (v19.17)
         2023-08-14 (v19.14.20.76)
         - Reporting Support phase 1
         2023-08-14 (v19.14.20.74)
@@ -453,7 +458,7 @@ PrivateData = @{
         - added diconnect (removes Global Variables )
         - added force connect (removes Global Variables )
         '
-    Prerelease = 'Pre'
+#    Prerelease = 'Pre'
     } # End of PSData hashtable
 
 } # End of PrivateData hashtable

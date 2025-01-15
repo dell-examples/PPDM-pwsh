@@ -642,6 +642,57 @@ function Get-PPDMesxDatastores {
     }
 }
 
+function Get-PPDMvcenterDatastores {
+    [CmdletBinding()]
+    param(
+
+        [Parameter(Mandatory = $true, ValueFromPipelineByPropertyName = $true)]
+        $id,
+        [Parameter(Mandatory = $true, ValueFromPipelineByPropertyName = $true)]
+        # Moref Cluster ID , e.g. "ClusterComputeResource:domain-c1006, can be retived via '(Get-PPDMhosts -hosttype ESX_CLUSTER -filter 'name eq "<clustername>"').details.esxcluster.clusterMoref'
+        $clusterMoref,        
+        $PPDM_API_BaseUri = $Global:PPDM_API_BaseUri,
+        $apiver = "/api/v2"
+    )
+    begin {
+        $Response = @()
+        $METHOD = "GET"
+   
+    }     
+    Process {
+        switch ($PsCmdlet.ParameterSetName) {
+
+            default {
+                $URI = "vcenter/$id/data-stores/$clusterMoref"
+            }
+        }        
+        $Parameters = @{
+            #            body             = $body 
+            Uri              = $Uri
+            Method           = $Method
+            RequestMethod    = 'Rest'
+            PPDM_API_BaseUri = $PPDM_API_BaseUri
+            apiver           = $apiver
+            Verbose          = $PSBoundParameters['Verbose'] -eq $true
+        }      
+        try {
+            $Response += Invoke-PPDMapirequest @Parameters      
+        }
+        catch {
+            Get-PPDMWebException  -ExceptionMessage $_
+            break
+        }
+        write-verbose ($response | Out-String)
+    } 
+    end {    
+        switch ($PsCmdlet.ParameterSetName) {
+
+            default {
+                write-output $response.datastores
+            } 
+        }   
+    }
+}
 
 
 function Get-PPDMvcenterDatacenters {

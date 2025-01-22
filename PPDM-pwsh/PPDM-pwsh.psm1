@@ -252,7 +252,7 @@ function Invoke-PPDMapirequest {
         $Query,
         [Parameter(Mandatory = $false, ParameterSetName = 'default')]
         [Parameter(Mandatory = $false, ParameterSetName = 'outfile')]
-        [Parameter(Mandatory = $false, ParameterSetName = 'infile')]
+        [Parameter(Mandatory = $false, ParameterSetName = 'infile')] 
         $ContentType = 'application/json', 
         [Parameter(Mandatory = $false, ParameterSetName = 'default')]
         [Parameter(Mandatory = $false, ParameterSetName = 'outfile')]
@@ -288,6 +288,8 @@ function Invoke-PPDMapirequest {
         [switch]$ChangeUserPassword,
         [Parameter(Mandatory = $false, ParameterSetName = 'default')]
         $Filter,
+        [Parameter(Mandatory = $false, ParameterSetName = 'default')]
+        $policyFilter,        
         [Parameter(Mandatory = $true, ParameterSetName = 'infile')]
         $InFile,
         [Parameter(Mandatory = $true, ParameterSetName = 'outfile')]
@@ -351,6 +353,7 @@ function Invoke-PPDMapirequest {
                     $Parameters.Add('body', $query)
                     Write-Verbose ($Query | Out-String)
                 }
+
                 if ($filter) {
                     # $filterstring = [System.Web.HTTPUtility]::UrlEncode($filter)
                     # $filterstring = "filter=$filterstring"
@@ -359,6 +362,10 @@ function Invoke-PPDMapirequest {
                     # $uri = "$($uri)?$filterstring"
                     # Write-Verbose $uri
                 }
+                if ($policyfilter) {
+                    write-verbose ($policyFilter | Out-String)
+                    $body.add('policyFilter', $policyFilter) 
+                }                
                 if ($ResponseHeadersVariable) {
                     $Parameters.Add('ResponseHeadersVariable', 'HeadersResponse')
                 }

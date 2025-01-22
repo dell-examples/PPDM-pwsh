@@ -2708,3 +2708,108 @@ function Set-PPDMProtection_Policies {
     }   
   }
 }
+
+<#
+.Synopsis
+Creates an Centralized or Self Service Primary Backup Policy
+.Description
+Parametersets are Used to define Centralized or Self-Service Policies
+For Centralized Backups, a Schedule Object creted with  must be Provided
+
+.Example
+Get Protection Policy with Policy Filter 'objectives.config.backupMechanism eq "AUTO"'
+backup Mechanisms can be 
+          - SBT
+          - OIM
+          - FBB
+          - BBB
+          - AUTO
+          - VADP
+          - SDM
+Get-PPDMprotection_policy_summaries -Policyfilter 'objectives.config.backupMechanism eq "AUTO"'
+#>
+function Get-PPDMprotection_policy_summaries {
+  [CmdletBinding()]
+  param(
+      [Parameter(Mandatory = $false, ParameterSetName = 'all', ValueFromPipelineByPropertyName = $true)]
+      $filter,
+      [Parameter(Mandatory = $false, ParameterSetName = 'all', ValueFromPipelineByPropertyName = $true)]
+      $Policyfilter,      
+      [Parameter(Mandatory = $false, ParameterSetName = 'all', ValueFromPipelineByPropertyName = $true)]
+      $pageSize, 
+      [Parameter(Mandatory = $false, ParameterSetName = 'all', ValueFromPipelineByPropertyName = $true)]
+      $page, 
+      [Parameter(Mandatory = $false, ParameterSetName = 'all', ValueFromPipelineByPropertyName = $true)]
+      [hashtable]$body = @{orderby = 'createdAt DESC' },
+      [Parameter(Mandatory = $false, ValueFromPipelineByPropertyName = $true)]                
+      $PPDM_API_BaseUri = $Global:PPDM_API_BaseUri,
+      [Parameter(Mandatory = $false, ValueFromPipelineByPropertyName = $true)]
+      $apiver = "/api/v3"
+  )
+
+  begin {
+      $Response = @()
+      $METHOD = "GET"
+      $Myself = ($MyInvocation.MyCommand.Name.Substring(8) -replace "_", "-").ToLower()
+ 
+  }     
+  Process {
+      switch ($PsCmdlet.ParameterSetName) {
+
+          default {
+              $URI = "/$myself"
+          }
+      }  
+      if ($pagesize) {
+          $body.add('pageSize', $pagesize)
+      }
+      if ($page) {
+          $body.add('page', $page)
+      }   
+      $Parameters = @{
+          RequestMethod    = 'REST'
+          body             = $body
+          Uri              = $URI
+          Method           = $Method
+          PPDM_API_BaseUri = $PPDM_API_BaseUri
+          apiver           = $apiver
+          Verbose          = $PSBoundParameters['Verbose'] -eq $true
+      }
+      if ($type) {
+          if ($filter) {
+              $filter = 'type eq "' + $type + '" and ' + $filter 
+          }
+          else {
+              $filter = 'type eq "' + $type + '"'
+          }
+      }        
+      if ($filter) {
+          $parameters.Add('filter', $filter)
+      }
+      if ($policyFilter) {
+        $parameters.Add('policyFilter', $Policyfilter)
+    }               
+      try {
+          $Response += Invoke-PPDMapirequest @Parameters
+      }
+      catch {
+          Get-PPDMWebException  -ExceptionMessage $_
+          break
+      }
+      write-verbose ($response | Out-String)
+  } 
+  end {    
+      switch ($PsCmdlet.ParameterSetName) {
+          'byID' {
+              write-output $response 
+          }
+          default {
+              write-output $response.content
+              if ($response.page) {
+                  write-host ($response.page | out-string)
+              }
+          } 
+      }   
+  }
+}
+

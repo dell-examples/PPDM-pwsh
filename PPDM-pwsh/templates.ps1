@@ -6,8 +6,6 @@ function Get-PPDMxxxNoID {
         $id,
         [Parameter(Mandatory = $false, ParameterSetName = 'all', ValueFromPipelineByPropertyName = $true)]
         $filter,
- #       [ValidateSet()]
- #       [Alias('AssetType')][string]$type,
         [Parameter(Mandatory = $false, ParameterSetName = 'all', ValueFromPipelineByPropertyName = $true)]
         $pageSize, 
         [Parameter(Mandatory = $false, ParameterSetName = 'all', ValueFromPipelineByPropertyName = $true)]

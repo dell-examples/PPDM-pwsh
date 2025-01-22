@@ -12,7 +12,7 @@
 RootModule = 'PPDM-pwsh.psm1'
 
 # Version number of this module.
-ModuleVersion = '19.17.0.1'
+ModuleVersion = '19.17.0.12'
 
 # Supported PSEditions
 # CompatiblePSEditions = @()
@@ -100,7 +100,8 @@ NestedModules = @(
     './modules/exported-copies',
     './modules/reporting',
     './modules/account',
-    './modules/search'
+    './modules/search',
+    './modules/hypervisors'
 )
 
 # Functions to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no functions to export.
@@ -125,7 +126,8 @@ FunctionsToExport = @(
     'Disable-PPDMProtectionEngineProxy',
     'Get-PPDMprotection_policies',
     'New-PPDMprotection_policies',
-    'Set-PPDMprotection_policies',    
+    'Set-PPDMprotection_policies', 
+    'Get-PPDMprotection_policy_summaries',
     'Get-PPDMdiscoveries',
     'Set-PPDMdiscoveries',
     'Start-PPDMprotection_policies',
@@ -232,6 +234,7 @@ FunctionsToExport = @(
     'Get-PPDMupgrade_packages',
     'Stop-PPDMupgrade',
     'Start-PPDMupgradePrecheck',
+    'Start-PPDMupgrade',
     'Get-PPDMPasswordPolicies',
     'Set-PPDMPasswordPolicies',
     'Remove-PPDMcdrs',
@@ -317,7 +320,9 @@ FunctionsToExport = @(
     'Set-PPDMuserpassword',
     'Get-PPDMsearch_clusters',
     'New-PPDMsearch_nodes',
-    'Get-PPDMsearch_nodes'
+    'Get-PPDMsearch_nodes',
+    'Get-PPDMhypervisor_root_object',
+    'Add-PPDMinfrastructure_objects'
     )
 
 # Cmdlets to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no cmdlets to export.

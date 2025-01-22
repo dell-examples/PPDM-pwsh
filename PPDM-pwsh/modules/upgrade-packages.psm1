@@ -266,3 +266,64 @@ Function Start-PPDMupgradePrecheck {
         }   
     }
 }
+
+
+Function Start-PPDMupgrade {
+    [CmdletBinding()]
+    param(
+        [Parameter(Mandatory = $true, ParameterSetName = 'byID', ValueFromPipelineByPropertyName = $true)]
+        [psobject]$UpgradeObject, 
+        [Parameter(Mandatory = $false, ParameterSetName = 'byID', ValueFromPipelineByPropertyName = $false)]
+        [switch]$forceUpgrade,       
+        $PPDM_API_BaseUri = $Global:PPDM_API_BaseUri,
+        $apiver = "/api/v2"
+
+    )
+    begin {
+        $Response = @()
+        $METHOD = "PUT"
+   
+    }   
+
+    Process {
+        $UpgradeObject.state = "INSTALLED"
+        $UpgradeObject.sizeInBytes = [int64]$UpgradeObject.sizeInBytes
+        switch ($PsCmdlet.ParameterSetName) {
+            'byID' {
+                $URI = "upgrade-packages/$($UpgradeObject.id)"
+            }
+        }  
+        if ($forceUpgrade.ispresent) {
+            $URI = "$($URI)?forceUpgrade=true"
+        }  
+        $body = $UpgradeObject | ConvertTo-Json -Depth 7
+        $Parameters = @{
+            body             = $body 
+            Uri              = $Uri
+            Method           = $Method
+            RequestMethod    = 'Rest'
+            PPDM_API_BaseUri = $PPDM_API_BaseUri
+            apiver           = $apiver
+            Verbose          = $PSBoundParameters['Verbose'] -eq $true
+        } 
+      
+        try {
+            $Response += Invoke-PPDMapirequest @Parameters
+        }
+        catch {
+            Get-PPDMWebException  -ExceptionMessage $_
+            break
+        }
+        write-verbose ($response | Out-String)
+    } 
+    end {    
+        switch ($PsCmdlet.ParameterSetName) {
+            'byID' {
+                write-output $response 
+            }
+            default {
+                write-output $response.content
+            } 
+        }   
+    }
+}

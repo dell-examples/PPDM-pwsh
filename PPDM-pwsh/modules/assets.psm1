@@ -45,7 +45,10 @@ function Get-PPDMassets {
             'CLOUD_NATIVE_ENTITY',
             'POWERSTORE_BLOCK',
             'CLOUD_DIRECTOR_VAPP',
-            'DR')]
+            'DR',
+            'POWER_MAX_BLOCK',
+            'HYPERV_VIRTUAL_MACHINE'
+        )]
         [Alias('AssetType')][string]$type,
         [Parameter(Mandatory = $false, ValueFromPipelineByPropertyName = $true)]
         $pageSize, 
@@ -77,7 +80,7 @@ function Get-PPDMassets {
                 if ($Hosts -and !$activeHosts) {
                     $URI = "/$myself/$id/hosts"
                 }
-                if (!$hosts -and !$activehosts){
+                if (!$hosts -and !$activehosts) {
                     $URI = "/$myself/$id"                    
                 }
                 $body = @{}  
@@ -230,7 +233,7 @@ function Get-PPDMcopy_map {
         $Myself = ($MyInvocation.MyCommand.Name.Substring(8) -replace "_", "-").ToLower()
         $body = @{}
         if ($excludeCopyState) {
-            $body.Add('excludeCopyState',($excludeCopyState -join ","))
+            $body.Add('excludeCopyState', ($excludeCopyState -join ","))
         }        
     }     
     Process {
@@ -1160,7 +1163,7 @@ function Set-PPDMOracleOIMProtectionProtocol {
         [Parameter(Mandatory = $true, ValueFromPipelineByPropertyName = $true)]
         [Alias('AssetID')]$ID,
         [Parameter(Mandatory = $TRUE, ValueFromPipelineByPropertyName = $true)]
-        [ValidateSet('NFS','BOOST')]$ProtectionProtocol,
+        [ValidateSet('NFS', 'BOOST')]$ProtectionProtocol,
         [Parameter(Mandatory = $false, ValueFromPipelineByPropertyName = $true)]                        
         $PPDM_API_BaseUri = $Global:PPDM_API_BaseUri,
         [Parameter(Mandatory = $false, ValueFromPipelineByPropertyName = $true)]
@@ -1179,7 +1182,7 @@ function Set-PPDMOracleOIMProtectionProtocol {
         $request = @{
             'id'   = $requestID
             'body' = @{
-                'id'            = $ID
+                'id'                 = $ID
                 'protectionProtocol' = $ProtectionProtocol
             }    
         }

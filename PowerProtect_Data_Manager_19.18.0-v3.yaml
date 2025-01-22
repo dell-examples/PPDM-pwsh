@@ -1,0 +1,5208 @@
+components:
+  headers:
+    content-language:
+      description: The language code is used to describe the language(s) intended for the audience, so users can differentiate it according to their own preferred language. The default is en-US.
+      required: false
+      schema:
+        type: string
+  parameters:
+    async:
+      description: Indicates whether to make a synchronous or an asynchronous API call.
+      in: query
+      name: async
+      required: false
+      schema:
+        default: 'true'
+        type: string
+    filter:
+      allowEmptyValue: true
+      description: The filter string that is expressed using PowerProtect Data Manager filter syntax. Under Tasks, see Filter the result.
+      in: query
+      name: filter
+      schema:
+        type: string
+    groupBy:
+      allowEmptyValue: true
+      description: Group By option.
+      in: query
+      name: groupBy
+      schema:
+        type: string
+    orderby:
+      allowEmptyValue: true
+      description: The attributes and fields to sort by. This parameter can combine with sort direction "ASC" or "DESC". Default direction is ASC. Under Tasks, see Sort the result.
+      in: query
+      name: orderby
+      schema:
+        type: string
+    page:
+      allowEmptyValue: true
+      description: The page number to be returned. Must not be less than 1. Under Tasks, see Page the result.
+      in: query
+      name: page
+      schema:
+        default: 1
+        maximum: 10000
+        minimum: 1
+        type: integer
+    pageSize:
+      allowEmptyValue: true
+      description: The number of resources to be returned. Must not be less than 1. Under Tasks, see Page the result.
+      in: query
+      name: pageSize
+      schema:
+        default: 100
+        maximum: 10000
+        minimum: 1
+        type: integer
+    queryState:
+      allowEmptyValue: true
+      description: Token string to retrieve the next page of a result. The initial search request with queryState must be queryState=BEGIN and a pageSize. After a search begins, subsequent responses include a token string to pass as a parameter for the next page retrieval. When the query state in the response that is returned from the previous search is END, no further results can be retrieved from this query. For more details, under Tasks, see Page the result.
+      in: query
+      name: queryState
+      schema:
+        type: string
+    scope:
+      description: Indicates the enum values of the service info scope. The value, SINGLE returns the info for the current micro service instance. The value, ALL returns the aggregated info for all instances of that micro service.
+      in: query
+      name: scope
+      required: false
+      schema:
+        default: SINGLE
+        enum:
+        - SINGLE
+        - ALL
+        type: string
+    searchTerm:
+      allowEmptyValue: true
+      description: A general search text.
+      in: query
+      name: searchTerm
+      schema:
+        type: string
+  schemas:
+    Address:
+      allOf:
+      - $ref: '#/components/schemas/ProtectionAddress'
+      title: address
+      type: object
+    AnomalyDetectionDetail:
+      description: The detail of anomaly detection.
+      properties:
+        reportId:
+          description: The report ID if the anomaly detection report is generated.
+          type: string
+          x-ppdm-filter: true
+          x-ppdm-sort: true
+        status:
+          $ref: '#/components/schemas/AnomalyDetectionStatus'
+        userNote:
+          description: The user notes on a message.
+          properties:
+            createdAt:
+              description: The time that note is created.
+              format: date-time
+              type: string
+            notes:
+              description: The custom text note on the message.
+              type: string
+            updatedAt:
+              description: The time that note is updated.
+              format: date-time
+              type: string
+            username:
+              description: The name of the user who added or updated the notes.
+              type: string
+          type: object
+      title: AnomalyDetectionDetail
+      type: object
+      x-tags:
+      - Resource
+    AnomalyDetectionStatus:
+      enum:
+      - FAILED
+      - CLEAN
+      - SUSPICIOUS
+      - VERIFIED_SAFE
+      - QUARANTINED
+      title: AnomalyDetectionStatus
+      type: string
+      x-ppdm-filter: true
+      x-ppdm-sort: true
+    AssetRefWithName:
+      description: The assetRef contains basic information of asset.
+      properties:
+        assetSourceName:
+          description: The name of the asset source.
+          type: string
+          x-ppdm-filter: true
+          x-ppdm-sort: false
+        id:
+          description: The id of the asset.
+          type: string
+          x-ppdm-filter: false
+          x-ppdm-sort: false
+        name:
+          description: The name of the asset.
+          type: string
+          x-ppdm-filter: true
+          x-ppdm-sort: false
+        subtype:
+          $ref: '#/components/schemas/AssetSubtype'
+      required:
+      - type
+      title: AssetRef
+      type: object
+    AssetSubtype:
+      enum:
+      - POWERSTORE_VOLUMEGROUP
+      - POWERSTORE_VOLUME
+      - POWER_MAX_VOLUME
+      - POWER_MAX_STORAGE_GROUP
+      - MSSQL
+      - ORACLE_CDB
+      - ORACLE_NON_CDB
+      - ORACLE_PDB
+      - VIRTUALMACHINE
+      - DR
+      - NTFS
+      - ReFS
+      - CSVFS
+      - ext3
+      - ext4
+      - xfs
+      - zfs
+      - btrfs
+      - FS_DR
+      - JFS
+      - JFS2
+      - SSR
+      - K8S_NAMESPACE
+      - K8S_PERSISTENT_VOLUME_CLAIM
+      - SAPHANA_SYSTEM
+      - SAPHANA_TENANT
+      - EXCHANGE_MAILBOX
+      - EXCHANGE_PUBLIC_FOLDER
+      - UNITY_NFS
+      - UNITY_CIFS
+      - POWERSTORE_NFS
+      - POWERSTORE_CIFS
+      - POWERSCALE_NFS
+      - POWERSCALE_CIFS
+      - NFS_GENERIC
+      - CIFS_GENERIC
+      - CLOUD_DIRECTOR_VAPP
+      - NETAPP_CIFS
+      - NETAPP_NFS
+      title: AssetSubtype
+      type: string
+      x-ppdm-filter: true
+      x-ppdm-sort: true
+    AssetType:
+      enum:
+      - CLOUD_NATIVE_ENTITY
+      - POWERSTOREVOLUMEGROUP
+      - POWERSTOREVOLUME
+      - VMWARE_VIRTUAL_MACHINE
+      - ORACLE_DATABASE
+      - MICROSOFT_SQL_DATABASE
+      - FILE_SYSTEM
+      - KUBERNETES
+      - SAP_HANA_DATABASE
+      - MICROSOFT_EXCHANGE_DATABASE
+      - NAS_SHARE
+      - CLOUD_DIRECTOR_VAPP
+      - POWERSTORE_BLOCK
+      - DR
+      - POWER_MAX_BLOCK
+      - HYPERV_VIRTUAL_MACHINE
+      title: AssetType
+    Avamar:
+      properties:
+        address:
+          description: The IP address or hostname of the Avamar.
+          type: string
+        credentialsId:
+          description: The credentials ID of the Avamar.
+          type: string
+        id:
+          description: The ID of the Avamar.
+          type: string
+        name:
+          description: The user-customized name for the Avamar inventory source.
+          type: string
+        port:
+          description: The port of the Avamar.
+          type: integer
+        version:
+          description: The version of the Avamar.
+          type: string
+      title: Avamar
+      type: object
+    AvamarAsset:
+      properties:
+        avamarAddress:
+          description: The address of the Avamar.
+          type: string
+        avamarAssetId:
+          description: The Avamar asset ID.
+          type: string
+        avamarId:
+          description: The resource ID of the Avamar.
+          type: string
+        avamarName:
+          description: The user-customized name for the Avamar inventory source.
+          type: string
+        name:
+          description: The Avamar asset name.
+          type: string
+        operatingSystem:
+          description: The asset operating system.
+          type: string
+        path:
+          description: Asset path in Avamar.
+          type: string
+      title: AvamarAsset
+      type: object
+    AvamarAssetCopy:
+      properties:
+        avamarAssetId:
+          description: Avamar asset ID.
+          type: string
+        createdTime:
+          description: Created Time of copy on Avamar.
+          format: date-time
+          type: string
+        location:
+          description: Location of the Avamar copy.
+          enum:
+          - LOCAL
+          - REMOTE
+          type: string
+        managedBy:
+          description: The Avamar server managing the copy.
+          type: string
+        protectionStorage:
+          description: Copy protection storage.
+          type: string
+        retentionTime:
+          description: Copy retention time.
+          format: date-time
+          type: string
+        size:
+          description: The used capacity in the storage system of this copy in bytes.
+          format: int64
+          type: integer
+      title: AvamarAssetCopy
+      type: object
+    AvamarAssetCopyPage:
+      description: Avamar asset copy page.
+      properties:
+        content:
+          items:
+            $ref: '#/components/schemas/AvamarAssetCopy'
+          type: array
+        page:
+          $ref: '#/components/schemas/PageInfo'
+      title: AvamarAssetCopyPage
+      type: object
+    AvamarAssetDetails:
+      properties:
+        avamarAssetId:
+          description: Avamar asset ID.
+          type: string
+        avamarId:
+          description: AvamarId Avamar resource ID.
+          type: string
+        avamarName:
+          description: Name of the Avamar.
+          type: string
+        name:
+          description: Asset name.
+          type: string
+        operatingSystem:
+          description: OperatingSystem Asset operating system.
+          type: string
+        path:
+          description: Asset path in Avamar.
+          type: string
+        plugins:
+          description: The list of Plugin names of the asset.
+          items:
+            $ref: '#/components/schemas/AvamarPlugin'
+          type: array
+      title: AvamarAssetDetails
+      type: object
+    AvamarAssetsPage:
+      description: Avamar inventory source page.
+      properties:
+        content:
+          items:
+            $ref: '#/components/schemas/AvamarAsset'
+          type: array
+        page:
+          $ref: '#/components/schemas/PageInfo'
+      title: AvamarAssetsPage
+      type: object
+    AvamarCreateRequest:
+      properties:
+        address:
+          description: The IP address or hostname of the Avamar.
+          type: string
+        credentialsId:
+          description: The credentials ID of the Avamar.
+          type: string
+        name:
+          description: The user-customized name for the Avamar inventory source.
+          type: string
+        port:
+          description: The port of the Avamar.
+          type: integer
+      required:
+      - name
+      - address
+      - credentialsId
+      title: AvamarCreateRequest
+      type: object
+    AvamarInventorySourcesPage:
+      description: Avamar inventory source page.
+      properties:
+        content:
+          items:
+            $ref: '#/components/schemas/Avamar'
+          type: array
+        page:
+          $ref: '#/components/schemas/PageInfo'
+      title: AvamarInventorySourcesPage
+      type: object
+    AvamarPatchRequest:
+      properties:
+        credentialsId:
+          description: The credentials ID of the Avamar.
+          type: string
+        name:
+          description: The user-customized name for the Avamar inventory source.
+          type: string
+        port:
+          description: The port of the Avamar.
+          type: integer
+      title: AvamarPatchRequest
+      type: object
+    AvamarPlugin:
+      properties:
+        name:
+          description: Avamar plugin name.
+          type: string
+      title: AvamarPlugin
+      type: object
+    AvamarSettings:
+      description: The common settings that Avamar supports.
+      properties:
+        inventorySourceEnabled:
+          description: Indicates if the Avamar inventory source is enabled.
+          type: boolean
+      title: AvamarSettings
+      type: object
+    BackupLevel:
+      description: The backup level of this copy metadata.
+      enum:
+      - FULL
+      - DIFFERENTIAL
+      - INCREMENTAL
+      - LOG
+      - UNKNOWN
+      - SPFILE
+      - CONTROLFILE
+      - ARCHIVELOG
+      - INCR_0
+      - INCR_1_CUMULATIVE
+      - INCR_1_DIFFERENTIAL
+      - CUMULATIVE_INCR
+      - DIFF_INCR
+      - AUXILIARY
+      - INCR_DELTA
+      title: BackupLevel
+      type: string
+      x-ppdm-filter: true
+      x-ppdm-sort: true
+    BackupMode:
+      enum:
+      - VSS
+      - FSS
+      title: BackupMode
+      type: string
+      x-ppdm-filter: true
+      x-ppdm-sort: true
+    BackupSiteEnum:
+      description: 'The back-end uses this option to know how to orchestrate the snapshot (for assetType of POWERSTORE_BLOCK). The valid values are the following:
+
+        - PRIMARY_ARRAY
+
+        - REPLICA_ARRAY
+
+        - PRIMARY_AND_REPLICA_ARRAY'
+      enum:
+      - PRIMARY_ARRAY
+      - REPLICA_ARRAY
+      - PRIMARY_AND_REPLICA_ARRAY
+      title: BackupSite
+      type: string
+      x-ppdm-filter: true
+      x-ppdm-sort: true
+    BackupSource:
+      description: Indicates whether the copy is backed up from either the replica site or the primary site.
+      enum:
+      - ORIGINAL
+      - REPLICA
+      title: BackupSource
+      type: string
+      x-ppdm-filter: true
+      x-ppdm-sort: true
+    BackupStrategy:
+      description: Backup strategy of the protection group when the copy was created.
+      enum:
+      - BACKUP_ALL
+      - BACKUP_BY_RANK
+      - BACKUP_PRIMARY_ONLY
+      - BACKUP_STANDALONE
+      type: string
+      x-ppdm-filter: true
+      x-ppdm-sort: true
+    BackupSubLevel:
+      description: The backup sublevel of this copy metadata.
+      enum:
+      - SYNTHETIC_FULL
+      - GEN0_FULL
+      - NA
+      title: backupSubLevel
+      type: string
+      x-ppdm-filter: true
+      x-ppdm-sort: true
+    ChainDetail:
+      description: The detailed information of copy chain.
+      properties:
+        latestChain:
+          description: Indicate whether this copy is in the latest copy chain.
+          type: boolean
+          x-ppdm-filter: false
+          x-ppdm-sort: false
+        layer:
+          description: Indicates whether the layer of the copy is in the current copy chain, which is started from 0.
+          type: integer
+          x-ppdm-filter: false
+          x-ppdm-sort: false
+      title: ChainDetail
+      type: object
+    CloudDirectorVAppConfig:
+      properties:
+        dataConsistency:
+          $ref: '#/components/schemas/DataConsistencyEnum'
+        forceFull:
+          description: Indicates whether the policy engine promotes a non-full backup to a full backup when no full backup copy exists.
+          type: boolean
+          x-ppdm-filter: true
+          x-ppdm-sort: true
+        tierAfter:
+          $ref: '#/components/schemas/TierAfter'
+      title: CloudDirectorVAppConfig
+      type: object
+    CloudDirectorVAppOptions:
+      properties:
+        debugEnabled:
+          description: Indicates if logs need to enable DEBUG mode or not. Default to behavior of false if no value is provided.
+          type: boolean
+          x-ppdm-filter: true
+          x-ppdm-sort: true
+        disableQuiescing:
+          description: Indicate whether to turn off the quiescing snapshot for CLOUD_DIRECTOR_VAPP backups, the default value is false.
+          type: boolean
+          x-ppdm-filter: true
+          x-ppdm-sort: true
+        excludeSwapFiles:
+          description: Indicates whether the protection policy is configured with 'excludeSwapFiles'.
+          type: boolean
+          x-ppdm-filter: true
+          x-ppdm-sort: true
+      title: CloudDirectorVAppOptions
+      type: object
+    CloudDirectorVAppProtectionPolicy:
+      allOf:
+      - $ref: '#/components/schemas/ProtectionPolicyCommon'
+      - properties:
+          objectives:
+            description: The objectives.
+            items:
+              $ref: '#/components/schemas/ProtectionCloudDirectorVAppObjective'
+            type: array
+        type: object
+      title: PublicCloudDirectorVAppPolicy
+      type: object
+      x-discriminator-value: CLOUD_DIRECTOR_VAPP
+    CommonCopy:
+      description: The common fields of all kinds of Copy
+      discriminator:
+        propertyName: assetType
+      properties:
+        anomalyDetection:
+          $ref: '#/components/schemas/AnomalyDetectionDetail'
+        assetRef:
+          $ref: '#/components/schemas/AssetRefWithName'
+        assetType:
+          type: string
+          x-ppdm-filter: true
+          x-ppdm-sort: true
+        backupLevel:
+          $ref: '#/components/schemas/BackupLevel'
+        backupMode:
+          $ref: '#/components/schemas/BackupMode'
+        backupScope:
+          description: File system subtype for Bare Metal Recovery (BMR) and System State Recover (SSR).
+          type: string
+          x-ppdm-filter: true
+          x-ppdm-sort: true
+        backupSource:
+          $ref: '#/components/schemas/BackupSource'
+        backupSubLevel:
+          $ref: '#/components/schemas/BackupSubLevel'
+        backupTime:
+          description: The creation date and time of this copy.
+          format: date-time
+          type: string
+          x-ppdm-filter: true
+          x-ppdm-sort: true
+        backupTransactionId:
+          description: The backup transaction ID on the agent side.
+          type: string
+          x-ppdm-filter: true
+          x-ppdm-sort: true
+        baseCopyId:
+          description: Provides the relationship to the full copy that is the base for a differential or log copy.
+          type: string
+        chainBrokenCopyId:
+          type: string
+          x-ppdm-filter: true
+          x-ppdm-sort: true
+        chainDetail:
+          $ref: '#/components/schemas/ChainDetail'
+        createdAt:
+          description: The time when the copy metadata is created.
+          format: date-time
+          type: string
+          x-ppdm-filter: true
+          x-ppdm-sort: true
+        creator:
+          $ref: '#/components/schemas/Creator'
+        criticality:
+          description: "The criticality value of the copy, ranging from 1 to 4, indicates the level of importance. The default value is 2 ('Hot'). The meanings of the values are as follows:\n  1: Mission Critical\n  2: Hot\n  3: Warm\n  4: Cold"
+          type: integer
+          x-ppdm-filter: true
+          x-ppdm-sort: true
+        dataConsistency:
+          $ref: '#/components/schemas/DataConsistency'
+        dataIntegrity:
+          $ref: '#/components/schemas/DataIntegrity'
+        endedAt:
+          description: The end time of the copy generation process. E.g., backup, replication.
+          format: date-time
+          type: string
+          x-ppdm-filter: true
+          x-ppdm-sort: true
+        excludedItems:
+          description: Only used by FS now for file level exclusion. FS can set filter in policy to exclude files in backup.
+          items:
+            $ref: '#/components/schemas/ExcludedItem'
+          type: array
+        exportedCopyCount:
+          description: The number of exported copy count on this copy.
+          format: int64
+          type: integer
+          x-ppdm-filter: true
+          x-ppdm-sort: true
+        externalCatalogState:
+          $ref: '#/components/schemas/ExternalCatalogState'
+        externalIds:
+          description: The array of external IDs.
+          items:
+            type: string
+          type: array
+          x-ppdm-filter: true
+          x-ppdm-sort: true
+        flags:
+          items:
+            type: string
+          type: array
+        groups:
+          description: The array of copy groups.
+          items:
+            $ref: '#/components/schemas/CopyGroup'
+          type: array
+        id:
+          description: The unique ID of the copy.
+          type: string
+          x-ppdm-filter: true
+          x-ppdm-sort: true
+        location:
+          $ref: '#/components/schemas/Location'
+        logCount:
+          description: The number of logs that are dependent on the full copy.
+          format: int64
+          type: integer
+          x-ppdm-filter: false
+          x-ppdm-sort: false
+        metadataIndexing:
+          $ref: '#/components/schemas/MetadataIndexing'
+        name:
+          description: The name of this copy.
+          type: string
+          x-ppdm-filter: true
+          x-ppdm-sort: true
+        naturalIds:
+          description: The natural IDs (naturalIds) of this copy.
+          items:
+            type: string
+          type: array
+          x-ppdm-filter: true
+          x-ppdm-sort: true
+        originId:
+          description: The ID of the document in the origin PowerProtect Data Manager system.
+          type: string
+          x-ppdm-filter: true
+          x-ppdm-sort: true
+        origins:
+          description: Array containing the lineage information of the copy, where each element in the array is the ID of a copy.
+          items:
+            type: string
+          type: array
+        protectionEngineType:
+          $ref: '#/components/schemas/ProtectionEngineType'
+        protectionGroupRef:
+          $ref: '#/components/schemas/ProtectionGroupRef'
+        protectionPolicy:
+          $ref: '#/components/schemas/CopyProtectionPolicy'
+        relationships:
+          description: A list of relationship items.
+          items:
+            $ref: '#/components/schemas/Relationship'
+          type: array
+        replica:
+          description: The boolean flag to indicate whether this copy is a replica.
+          type: boolean
+          x-ppdm-filter: false
+          x-ppdm-sort: false
+        replicaDetail:
+          $ref: '#/components/schemas/ReplicaDetail'
+        replicatedStorageTargets:
+          description: The target storage that this copy is replicated to.
+          items:
+            $ref: '#/components/schemas/ReplicatedStorageTarget'
+          type: array
+        restoreTargetCompatibilities:
+          items:
+            $ref: '#/components/schemas/RestoreTargetCompatibility'
+          type: array
+        retention:
+          $ref: '#/components/schemas/CopyRetention'
+        retentionCycles:
+          description: Array of copy's retention cycles.
+          items:
+            $ref: '#/components/schemas/RetentionCycle'
+          type: array
+        sizeInBytes:
+          description: The actual size in bytes of this copy, including size of all copy items.
+          format: int64
+          type: integer
+          x-ppdm-filter: true
+          x-ppdm-sort: true
+        startedAt:
+          description: The start time of the copy generation process. E.g., backup, replication.
+          format: date-time
+          type: string
+          x-ppdm-filter: true
+          x-ppdm-sort: true
+        state:
+          $ref: '#/components/schemas/CopyState'
+        storageDetail:
+          $ref: '#/components/schemas/StorageDetailWithName'
+        substate:
+          $ref: '#/components/schemas/CopySubstate'
+        systemId:
+          description: The ID of the remote or the local PowerProtect Data Manager system.
+          type: string
+          x-ppdm-filter: true
+          x-ppdm-sort: true
+        systemTags:
+          description: Each system tag contains a tag category and a tag name which are separated by two vertical lines. E.g., TAG_CATEGORY||TAG_NAME.
+          items:
+            type: string
+          type: array
+        tenantId:
+          description: The tenant ID of the copy.
+          type: string
+          x-ppdm-filter: true
+          x-ppdm-sort: true
+        tieringDetail:
+          $ref: '#/components/schemas/TieringDetail'
+        transactions:
+          description: The completed or ongoing transactions on this copy.
+          items:
+            $ref: '#/components/schemas/CopyTransaction'
+          type: array
+        triggerType:
+          $ref: '#/components/schemas/TriggerType'
+        unavailableReason:
+          $ref: '#/components/schemas/UnavailableReason'
+        updatedAt:
+          description: The time when the copy metadata is updated.
+          format: date-time
+          type: string
+          x-ppdm-filter: true
+          x-ppdm-sort: true
+        userTags:
+          description: Each user tag contains a tag category and a tag name which are separated by two vertical lines. E.g., TAG_CATEGORY||TAG_NAME.
+          items:
+            type: string
+          type: array
+          uniqueItems: true
+      title: CommonCopy
+      type: object
+    ConnectionDetail:
+      allOf:
+      - $ref: '#/components/schemas/ProtectionConnectionDetail'
+      - properties:
+          addresses:
+            description: The network addresses.
+            items:
+              $ref: '#/components/schemas/Address'
+            type: array
+          extraParams:
+            description: The extra parameters.
+            items:
+              $ref: '#/components/schemas/ExtraParam'
+            type: array
+        type: object
+      description: Describes how to connect the assets that are protected by the policy.
+      type: object
+    CopiesSearchRequest:
+      description: Copies search request.
+      properties:
+        filter:
+          description: The filter string that is expressed using PowerProtect Data Manager filter syntax. Under Tasks, see Filter the result.
+          type: string
+        includeDependants:
+          default: false
+          description: Whether include copies that the input copies depend on. E.g., a differential copy depend on full copy, with includeDependencies=true, input differential copy, return differential copy and full copy. And input full copy will only return full copy.
+          type: boolean
+        includeDependencies:
+          default: false
+          description: Whether include copies that the input copies depend by. E.g., a differential copy depend on full copy, with includeDependants=true, input full copy, return differential copy and full copy. And input differential copy will only return differential copy.
+          type: boolean
+        latestCopyForAssetOnly:
+          default: false
+          description: Only retrieve the latest copy for each asset when multiple copies are matching the search criteria.
+          type: boolean
+        orderby:
+          description: The attributes and fields to sort by. This parameter can combine with sort direction "ASC" or "DESC". Default direction is ASC. Under Tasks, see Sort the result.
+          type: string
+        page:
+          default: 1
+          description: The page number to be returned. Must not be less than 1. Under Tasks, see Page the result.
+          type: integer
+        pageSize:
+          default: 100
+          description: The number of resources to be returned. Must not be less than 1. Under Tasks, see Page the result.
+          type: integer
+        queryState:
+          description: Token string to retrieve the next page of a result. The initial search request with queryState must be queryState=BEGIN and a pageSize. After a search begins, subsequent responses include a token string to pass as a parameter for the next page retrieval. When the query state in the response that is returned from the previous search is END, no further results can be retrieved from this query. For more details, under Tasks, see Page the result.
+          type: string
+      type: object
+    Copy:
+      discriminator:
+        mapping:
+          DR: '#/components/schemas/DrCopy'
+          FILE_SYSTEM: '#/components/schemas/FileSystemCopy'
+          KUBERNETES: '#/components/schemas/KubernetesCopy'
+          MICROSOFT_EXCHANGE_DATABASE: '#/components/schemas/MsExchangeDatabaseCopy'
+          MICROSOFT_SQL_DATABASE: '#/components/schemas/MssqlCopy'
+          NAS_SHARE: '#/components/schemas/NasCopy'
+          ORACLE_DATABASE: '#/components/schemas/OracleCopy'
+          POWERSTORE_BLOCK: '#/components/schemas/PowerStoreBlockCopy'
+          POWER_MAX_BLOCK: '#/components/schemas/PowerMaxBlockCopy'
+          SAP_HANA_DATABASE: '#/components/schemas/SapHanaDatabaseCopy'
+          VMWARE_VIRTUAL_MACHINE: '#/components/schemas/VmCopy'
+        propertyName: assetType
+      oneOf:
+      - $ref: '#/components/schemas/VmCopy'
+      - $ref: '#/components/schemas/KubernetesCopy'
+      - $ref: '#/components/schemas/FileSystemCopy'
+      - $ref: '#/components/schemas/MssqlCopy'
+      - $ref: '#/components/schemas/OracleCopy'
+      - $ref: '#/components/schemas/MsExchangeDatabaseCopy'
+      - $ref: '#/components/schemas/SapHanaDatabaseCopy'
+      - $ref: '#/components/schemas/NasCopy'
+      - $ref: '#/components/schemas/PowerStoreBlockCopy'
+      - $ref: '#/components/schemas/PowerMaxBlockCopy'
+      - $ref: '#/components/schemas/DrCopy'
+    CopyGroup:
+      properties:
+        groupBy:
+          description: An array of selected copy attributes used to identity the unique copy group.
+          items:
+            $ref: '#/components/schemas/GroupBy'
+          type: array
+        id:
+          description: The copy group ID.
+          type: string
+          x-ppdm-filter: true
+          x-ppdm-sort: true
+        representative:
+          description: To indicate whether this is the representative copy among the copies in the copy group.
+          type: boolean
+          x-ppdm-filter: true
+          x-ppdm-sort: true
+        totalCopies:
+          description: The total copy count belongs to the copy group.
+          format: int64
+          type: integer
+          x-ppdm-filter: true
+          x-ppdm-sort: true
+      title: CopyGroup
+      type: object
+      x-tags:
+      - Resource
+    CopyProtectionPolicy:
+      description: The protection policy of copy.
+      properties:
+        id:
+          type: string
+          x-ppdm-filter: true
+          x-ppdm-sort: true
+        stages:
+          items:
+            $ref: '#/components/schemas/ProtectionPolicyStage'
+          type: array
+      title: ProtectionPolicy
+      type: object
+      x-tags:
+      - Resource
+    CopyRetention:
+      properties:
+        expiresAt:
+          description: The retention time of this copy to indicate when this copy should expires at, that is persisted with millisecond-level. For example, a time value such as '2024-03-19T14:15:123456789Z' would be truncated to '2024-03-19T14:15:123Z'.
+          format: date-time
+          type: string
+          x-ppdm-filter: true
+          x-ppdm-sort: true
+        lockMode:
+          $ref: '#/components/schemas/LockMode'
+        lockStatus:
+          $ref: '#/components/schemas/LockStatus'
+      title: Retention
+      type: object
+      x-tags:
+      - Resource
+    CopyState:
+      description: The overall state of this copy. PPDM only supports filtering by state.
+      enum:
+      - CREATING
+      - IDLE
+      - INUSE
+      - TIERING
+      - RECALLING
+      - DELETING
+      - DELETED
+      - UNAVAILABLE
+      - ARCHIVING
+      - STAGING
+      type: string
+      x-ppdm-filter: true
+      x-ppdm-sort: true
+    CopySubstate:
+      description: "The substate of this copy.\n- When state is IDLE, substate can be NONE or READY_FOR_CLOUD_TIERING.\n- When state is INUSE, substate can be RESTORING, EXPORTING or REPLICATING.  \n- When state is UNAVAILABLE, substate can be DELETE_FAILED or AGENT_CATALOG_DELETE_FAILED.\n- When state is DELETED, substate can be NONE, SOFT_DELETED or AGENT_CATALOG_DELETE_FAILED."
+      enum:
+      - NONE
+      - READY_FOR_CLOUD_TIERING
+      - RESTORING
+      - EXPORTING
+      - DELETE_FAILED
+      - SOFT_DELETED
+      - AGENT_CATALOG_DELETE_FAILED
+      - READY_FOR_ARCHIVING
+      type: string
+      x-ppdm-filter: true
+      x-ppdm-sort: true
+    CopyTransaction:
+      description: Completed or ongoing transactions on the copy.
+      properties:
+        additionalScope:
+          $ref: '#/components/schemas/CopyTransactionAddtionalScope'
+        currentRetry:
+          description: The current number of retries.
+          format: int64
+          type: integer
+          x-ppdm-filter: true
+          x-ppdm-sort: true
+        description:
+          description: The description of the copy transaction.
+          type: string
+        endState:
+          $ref: '#/components/schemas/CopyTransactionEndState'
+        endedAt:
+          description: The end time of the copy transaction, that is persisted with millisecond-level. For example, a time value such as '2024-03-19T14:15:123456789Z' would be truncated to '2024-03-19T14:15:123Z'. The transaction can be terminated by the user or due to expiration.
+          format: date-time
+          type: string
+          x-ppdm-filter: true
+          x-ppdm-sort: true
+        expiresAt:
+          description: The expiration time of the copy transaction, that is persisted with millisecond-level. For example, a time value such as '2024-03-19T14:15:123456789Z' would be truncated to '2024-03-19T14:15:123Z'. If the transaction cannot be completed before this time, the user must manually extend its lifetime.
+          format: date-time
+          type: string
+          x-ppdm-filter: true
+          x-ppdm-sort: true
+        id:
+          description: The unique ID of this transaction.
+          type: string
+        startedAt:
+          description: The start time of the copy transaction, that is persisted with millisecond-level. For example, a time value such as '2024-03-19T14:15:123456789Z' would be truncated to '2024-03-19T14:15:123Z'.
+          format: date-time
+          type: string
+          x-ppdm-filter: true
+          x-ppdm-sort: true
+        type:
+          $ref: '#/components/schemas/CopyTransactionType'
+      title: Copy Transaction
+      type: object
+      x-tags:
+      - Resource
+    CopyTransactionAddtionalScope:
+      description: The addtional scope of the copy transaction.
+      properties:
+        assetId:
+          description: The ID of asset impacted by the copy transaction..
+          type: string
+          x-ppdm-filter: true
+          x-ppdm-sort: true
+        copyIds:
+          description: The list of relevant copies impacted by the copy transaction.
+          items:
+            type: string
+            x-ppdm-filter: true
+            x-ppdm-sort: true
+          type: array
+        dataTargetId:
+          description: The data target of the copy that this copy transaction applies to.
+          type: string
+          x-ppdm-filter: true
+          x-ppdm-sort: true
+      title: copyTransactionAddtionalScope
+      type: object
+      x-tags:
+      - Resource
+    CopyTransactionEndState:
+      description: The resulting state of the copy transaction.
+      enum:
+      - SUCCEEDED
+      - FAILED
+      - EXPIRED
+      title: CopyTransactionEndState
+      type: string
+      x-ppdm-filter: true
+      x-ppdm-sort: true
+    CopyTransactionType:
+      description: The type of the copy transaction.
+      enum:
+      - CREATE
+      - RESTORE
+      - EXPORT
+      - REPLICATE
+      - TIER
+      - RECALL
+      - DELETE
+      title: CopyTransactionType
+      type: string
+      x-ppdm-filter: true
+      x-ppdm-sort: true
+    CopyUnavailableType:
+      description: The type of reason that the copy is unavailable.
+      enum:
+      - CREATION_FAILED
+      - DELETION_FAILED
+      - PARTIAL_COPY
+      type: string
+    Creator:
+      description: Indicate the copy is created by PowerProtect Data Manager or not.
+      enum:
+      - CENTRALIZED
+      - SELF_SERVICE
+      title: creator
+      type: string
+      x-ppdm-filter: true
+      x-ppdm-sort: true
+    DataConsistency:
+      enum:
+      - CRASH_CONSISTENT
+      - APPLICATION_CONSISTENT
+      title: DataConsistency
+      type: string
+      x-ppdm-filter: true
+      x-ppdm-sort: true
+    DataConsistencyEnum:
+      description: The data consistency.
+      enum:
+      - CRASH_CONSISTENT
+      - APPLICATION_CONSISTENT
+      title: DataConsistencyEnum
+      type: string
+      x-ppdm-filter: true
+      x-ppdm-sort: true
+    DataIntegrity:
+      description: The data integrity information.
+      properties:
+        issues:
+          description: The data integrity issues detected by copy integrity scan.
+          items:
+            $ref: '#/components/schemas/DataIntegrityIssue'
+          type: array
+      title: dataIntegrity
+      type: object
+      x-tags:
+      - Resource
+    DataIntegrityIssue:
+      description: The data integrity issues detected by copy integrity scan.
+      properties:
+        alertId:
+          description: Refer to the alert that was raised for this data integrity issue.
+          type: string
+          x-ppdm-filter: false
+          x-ppdm-sort: false
+        type:
+          $ref: '#/components/schemas/DataIntegrityIssuesType'
+      title: dataIntegrityIssues
+      type: object
+      x-tags:
+      - Resource
+    DataIntegrityIssuesType:
+      enum:
+      - DD_FILE_MISSING
+      title: dataIntegrityIssuesType
+      type: string
+      x-ppdm-filter: false
+      x-ppdm-sort: false
+    DiskControllerType:
+      description: Indicate the copy is generated by adhoc or scheduled backup.
+      enum:
+      - IDE
+      - SCSI
+      - SATA
+      - USB
+      - USB3
+      - PCI
+      - NVME
+      type: string
+      x-ppdm-filter: true
+      x-ppdm-sort: true
+    DiskProvisioningType:
+      enum:
+      - THICK
+      - THICK_LAZY
+      - THICK_EAGER
+      - THIN
+      type: string
+      x-ppdm-filter: true
+      x-ppdm-sort: true
+    DrCopy:
+      allOf:
+      - $ref: '#/components/schemas/CommonCopy'
+      title: DR
+      type: object
+      x-discriminator-value: DR
+    ErrorMessage:
+      description: The error response that describes the failure reason and remediation.
+      properties:
+        code:
+          description: The error code number.
+          format: int32
+          type: integer
+        extendedInfo:
+          description: Additional information about the error.
+          type: string
+        message:
+          description: The EEMI message.
+          type: string
+        messageArgs:
+          description: The message arguments are the values for any substitution variables that are defined as part of the message.
+          items:
+            type: string
+          type: array
+        messageId:
+          description: The EEMI message ID.
+          type: string
+        messageTemplate:
+          description: The message template defines the display sequence of the message arguments array.
+          type: string
+        path:
+          description: The path that produced the error.
+          type: string
+        reason:
+          description: The reason that the error occurred.
+          type: string
+        remediation:
+          description: A recommended solution to resolve the error.
+          type: string
+        timestamp:
+          description: When the error occurred.
+          format: int64
+          type: integer
+      type: object
+    ExcludedItem:
+      properties:
+        type:
+          type: string
+        value:
+          type: string
+      title: ExcludedItem
+      type: object
+      x-tags:
+      - Resource
+    ExternalCatalogState:
+      description: The stage of external catalog.
+      enum:
+      - TO_BE_DELETED
+      - DELETING
+      - DELETED
+      - DELETE_FAILED
+      type: string
+    ExtraParam:
+      allOf:
+      - $ref: '#/components/schemas/ProtectionExtraParam'
+      title: extraParam
+      type: object
+    FileSystemConfig:
+      properties:
+        backupMechanism:
+          description: 'Backup mechanism allowed for assetType FILE_SYSTEM. The valid values are the following:
+
+            - FBB: File-Based Backup for FSAgents.
+
+            - BBB: Block-Based Backup for FSAgents.
+
+            - AUTO: Automatic for FSAgents.'
+          enum:
+          - FBB
+          - BBB
+          - AUTO
+          type: string
+          x-ppdm-filter: true
+          x-ppdm-sort: true
+        dataConsistency:
+          $ref: '#/components/schemas/DataConsistencyEnum'
+        excludeFilterIds:
+          description: IDs of exclusion filters that are associated with the protection policy.
+          items:
+            type: string
+          type: array
+          x-ppdm-filter: true
+          x-ppdm-sort: true
+        forceFull:
+          description: Indicates whether the policy engine promotes a non-full backup to a full backup when no full backup copy exists.
+          type: boolean
+          x-ppdm-filter: true
+          x-ppdm-sort: true
+        tierAfter:
+          $ref: '#/components/schemas/TierAfter'
+      title: FileSystemConfig
+      type: object
+    FileSystemCopy:
+      allOf:
+      - $ref: '#/components/schemas/CommonCopy'
+      - properties:
+          extendedData:
+            $ref: '#/components/schemas/FileSystemExtendedData'
+        type: object
+      title: File System
+      type: object
+      x-discriminator-value: FILE_SYSTEM
+    FileSystemExtendedData:
+      description: File System Extended Data.
+      properties:
+        backupAssets:
+          description: Critical volumes information.
+          items:
+            properties:
+              name:
+                description: Backup asset name. For example, for file system BMR, this property represents the critical volume name.
+                type: string
+              size:
+                description: Backup asset size. For example, for file system BMR, this property represents the critical volume capacity in GB.
+                format: int64
+                type: integer
+            type: object
+            x-tags:
+            - Resource
+          type: array
+        ddbeaMetadata:
+          properties:
+            ddHostname:
+              description: DD hostname this copy metadata is located on
+              type: string
+            ddUser:
+              description: User name of the user who backed up to the storage unit.
+              type: string
+            devicePath:
+              description: Device path.
+              type: string
+            namespace:
+              description: DDBEAs namespace.
+              type: string
+            size:
+              description: Size of the backup in bytes.
+              format: int64
+              type: integer
+            subSpaceGUID:
+              description: DDBEAs subspace.
+              type: string
+            subspace:
+              type: string
+            technology:
+              description: Backup technology used.
+              type: string
+            transactionId:
+              description: the Transaction ID DDBEA gave this particular backup.
+              type: string
+          type: object
+          x-tags:
+          - Resource
+        includesActiveDirectoryData:
+          description: This field indicates if the backup copies have the Active Directory (AD).
+          type: boolean
+        systemManufacturer:
+          description: Source manufacturer.
+          type: string
+          x-ppdm-filter: false
+          x-ppdm-sort: false
+        systemModel:
+          description: Source model.
+          type: string
+          x-ppdm-filter: false
+          x-ppdm-sort: false
+      title: File System Extended Data
+      type: object
+      x-tags:
+      - Resource
+    FileSystemOptions:
+      properties:
+        anomalyDetectionEnabled:
+          description: Indicates whether anomaly detection is enabled at the policy level for all the assets. This option can be enabled only when indexingEnabled is enabled.
+          type: boolean
+          x-ppdm-filter: true
+          x-ppdm-sort: true
+        debugEnabled:
+          description: Indicates if logs need to enable DEBUG mode or not. Default to behavior of false if no value is provided.
+          type: boolean
+          x-ppdm-filter: true
+          x-ppdm-sort: true
+        excludeNonCriticalDynamicDisks:
+          description: Indicate whether to include or exclude non-critical disk.
+          type: boolean
+          x-ppdm-filter: true
+          x-ppdm-sort: true
+        ignoreMissingSystemStateFiles:
+          description: Indicate whether to ignore missing Volume Snapshot Service (VSS) files.
+          type: boolean
+          x-ppdm-filter: true
+          x-ppdm-sort: true
+        ignoreThirdPartyServices:
+          description: Indicate whether to ignore third-party services when identifying critical volumes.
+          type: boolean
+          x-ppdm-filter: true
+          x-ppdm-sort: true
+        indexingEnabled:
+          description: 'Indicates if the protection policy for FileSystem assets enables the metadata indexing for backup. Default to behavior of false if no value is provided.
+
+            - false: No indexing for a backup copy
+
+            - true: Indexing for the backup copy'
+          type: boolean
+          x-ppdm-filter: true
+          x-ppdm-sort: true
+        skipUnprotectableState:
+          description: Skip the SQL database assets that are in a state that prevents protection from occurring.
+          type: boolean
+          x-ppdm-filter: true
+          x-ppdm-sort: true
+        systemStateRecoveryOnly:
+          description: Indicate whether to back up only the System State Recovery (SSR) components.
+          type: boolean
+          x-ppdm-filter: true
+          x-ppdm-sort: true
+      title: FileSystemOptions
+      type: object
+    FileSystemProtectionPolicy:
+      allOf:
+      - $ref: '#/components/schemas/ProtectionPolicyCommon'
+      - properties:
+          objectives:
+            description: The objectives.
+            items:
+              $ref: '#/components/schemas/ProtectionFileSystemObjective'
+            type: array
+        type: object
+      title: PublicFileSystemPolicy
+      type: object
+      x-discriminator-value: FILE_SYSTEM
+    GroupBy:
+      description: The selected copy attribute whose value is used to identify the unique copy group.
+      enum:
+      - PROTECTION_GROUP_ID
+      - DATA_TARGET_ID
+      - TIME
+      type: string
+      x-ppdm-filter: true
+      x-ppdm-sort: true
+    HypervVirtualMachineConfig:
+      properties:
+        dataConsistency:
+          $ref: '#/components/schemas/DataConsistencyEnum'
+        forceFull:
+          description: Indicates whether the policy engine promotes a non-full backup to a full backup when no full backup copy exists.
+          type: boolean
+          x-ppdm-filter: true
+          x-ppdm-sort: true
+        tierAfter:
+          $ref: '#/components/schemas/TierAfter'
+      title: HypervVirtualMachineConfig
+      type: object
+    HypervVirtualMachineOptions:
+      properties:
+        autoPromote:
+          description: Indicate whether to promote non-full to full backup in agent side.
+          type: boolean
+          x-ppdm-filter: true
+          x-ppdm-sort: true
+        debugEnabled:
+          description: Indicates if logs need to enable DEBUG mode or not. Default to behavior of false if no value is provided.
+          type: boolean
+          x-ppdm-filter: true
+          x-ppdm-sort: true
+        fallbackStrategyOnCheckPointFailure:
+          description: The strategy when the checkpoint failure occurs.
+          enum:
+          - TO_CRASH_CONSISTENT
+          type: string
+          x-ppdm-filter: true
+          x-ppdm-sort: true
+        retryCountOnCheckPointFailure:
+          description: The retry attempts when a checkpoint failure occurs.
+          format: int32
+          type: integer
+          x-ppdm-filter: true
+          x-ppdm-sort: true
+        updateBackupHistory:
+          description: The field is to describe whether backup history should be updated.
+          type: boolean
+          x-ppdm-filter: true
+          x-ppdm-sort: true
+      title: HypervVirtualMachineOptions
+      type: object
+    HypervVirtualMachineProtectionPolicy:
+      allOf:
+      - $ref: '#/components/schemas/ProtectionPolicyCommon'
+      - properties:
+          objectives:
+            description: The Hyper-V objectives.
+            items:
+              $ref: '#/components/schemas/ProtectionHypervVirtualMachineObjective'
+            type: array
+        type: object
+      title: PublicHypervVirtualMachinePolicy
+      type: object
+      x-discriminator-value: HYPERV_VIRTUAL_MACHINE
+    KubernetesConfig:
+      properties:
+        dataConsistency:
+          $ref: '#/components/schemas/DataConsistencyEnum'
+        forceFull:
+          description: Indicates whether the policy engine promotes a non-full backup to a full backup when no full backup copy exists.
+          type: boolean
+          x-ppdm-filter: true
+          x-ppdm-sort: true
+        tierAfter:
+          $ref: '#/components/schemas/TierAfter'
+      title: KubernetesConfig
+      type: object
+    KubernetesCopy:
+      allOf:
+      - $ref: '#/components/schemas/CommonCopy'
+      - properties:
+          extendedData:
+            $ref: '#/components/schemas/KubernetesExtendedData'
+        type: object
+      title: Kubernetes
+      type: object
+      x-discriminator-value: KUBERNETES
+    KubernetesExtendedData:
+      description: K8s Extended Data.
+      properties:
+        backupId:
+          type: string
+        clusterResourcesIncluded:
+          description: Parameter to identify if cluster scoped resources are included in this copy.
+          type: boolean
+        persistentVolumeClaims:
+          items:
+            properties:
+              appConsistentType:
+                description: Type of Application for the PVC if present.
+                type: string
+              dataMover:
+                description: The type of dataMover used.
+                type: string
+              excluded:
+                description: Flag indicating that this PVC existed at the time of the backup, but was excluded.
+                type: boolean
+              name:
+                description: The name of the Persistent Volume Claim.
+                type: string
+              size:
+                description: The size of the Persistent Volume Claim in bytes.
+                format: int64
+                type: integer
+              storageClass:
+                description: Storage class name of the Persistent Volume Claim.
+                type: string
+              uid:
+                description: The uid of the Persistent Volume Claim.
+                type: string
+            type: object
+            x-tags:
+            - Resource
+          type: array
+      title: Kubernetes Extended Data
+      type: object
+      x-tags:
+      - Resource
+    KubernetesProtectionPolicy:
+      allOf:
+      - $ref: '#/components/schemas/ProtectionPolicyCommon'
+      - properties:
+          objectives:
+            description: The objectives.
+            items:
+              $ref: '#/components/schemas/ProtectionKubernetesObjective'
+            type: array
+        type: object
+      title: PublicKubernetesPolicy
+      type: object
+      x-discriminator-value: KUBERNETES
+    LastExecution:
+      description: The last execution activity detail information.
+      properties:
+        category:
+          description: The last execution activity category of the protection policy.
+          type: string
+          x-ppdm-filter: true
+          x-ppdm-sort: true
+        status:
+          description: 'Indicates the last execution status for the protection policy, the value can be one of the following: SUCCEEDED, FAILED, CANCELLED, COMPLETED_WITH_EXCEPTIONS, IDLE, and SKIPPED.'
+          type: string
+          x-ppdm-filter: true
+          x-ppdm-sort: true
+      type: object
+    Location:
+      enum:
+      - LOCAL
+      - CLOUD
+      - LOCAL_RECALLED
+      - STORAGEARRAY
+      - OBS
+      type: string
+      x-ppdm-filter: false
+      x-ppdm-sort: false
+    LockMode:
+      description: The retention lock type. NOT_LOCKED, ECDM_ONLY_LOCK - copy is locked on PPDM. COMPLIANCE_LOCK_DD - retention lock is on MTree, retention time can be set on a copy level. GOVERNANCE_LOCK_DD - stricter lock, requires multiple approvals for deletion
+      enum:
+      - NOT_LOCKED
+      - ECDM_ONLY_LOCK
+      - COMPLIANCE_LOCK_DD
+      - GOVERNANCE_LOCK_DD
+      type: string
+      x-ppdm-filter: true
+      x-ppdm-sort: true
+    LockStatus:
+      description: The retention lock status of this copy.
+      enum:
+      - ALL_COPIES_UNLOCKED
+      - ALL_COPIES_LOCKED
+      - PARTIAL_COPIES_LOCKED
+      type: string
+      x-ppdm-filter: true
+      x-ppdm-sort: true
+    MetadataIndexing:
+      properties:
+        changedAt:
+          description: The date and time that the metadataIndexingStatus was last updated, that is persisted with millisecond-level. For example, a time value such as '2024-03-19T14:15:123456789Z' would be truncated to '2024-03-19T14:15:123Z'.
+          format: date-time
+          type: string
+        status:
+          $ref: '#/components/schemas/MetadataIndexingType'
+      title: MetadataIndexing
+      type: object
+      x-tags:
+      - Resource
+    MetadataIndexingType:
+      description: The status of Metadata Indexing for this PCS.
+      enum:
+      - QUEUED
+      - RUNNING
+      - FAILED
+      - FAILED_RETRY
+      - PARTIAL_SUCCESS
+      - SUCCESS
+      type: string
+      x-ppdm-filter: true
+      x-ppdm-sort: true
+    MsExchangeDatabaseConfig:
+      properties:
+        dataConsistency:
+          $ref: '#/components/schemas/DataConsistencyEnum'
+        forceFull:
+          description: Indicates whether the policy engine promotes a non-full backup to a full backup when no full backup copy exists.
+          type: boolean
+          x-ppdm-filter: true
+          x-ppdm-sort: true
+        tierAfter:
+          $ref: '#/components/schemas/TierAfter'
+      title: MsExchangeDatabaseConfig
+      type: object
+    MsExchangeDatabaseCopy:
+      allOf:
+      - $ref: '#/components/schemas/CommonCopy'
+      title: Exchange
+      type: object
+      x-discriminator-value: MICROSOFT_EXCHANGE_DATABASE
+    MsExchangeDatabaseOptions:
+      properties:
+        consistencyCheck:
+          description: The Exchange consistency check for the database and transaction log files. Default is NONE.
+          enum:
+          - NONE
+          - ALL
+          - LOGS_ONLY
+          - DATABASE_ONLY
+          type: string
+          x-ppdm-filter: true
+          x-ppdm-sort: true
+        debugEnabled:
+          description: Indicates if logs need to enable DEBUG mode or not. Default to behavior of false if no value is provided.
+          type: boolean
+          x-ppdm-filter: true
+          x-ppdm-sort: true
+      title: MsExchangeDatabaseOptions
+      type: object
+    MsExchangeDatabaseProtectionPolicy:
+      allOf:
+      - $ref: '#/components/schemas/ProtectionPolicyCommon'
+      - properties:
+          objectives:
+            description: The objectives.
+            items:
+              $ref: '#/components/schemas/ProtectionMsExchangeDatabaseObjective'
+            type: array
+        type: object
+      title: PublicMsExchangeDatabasePolicy
+      type: object
+      x-discriminator-value: MICROSOFT_EXCHANGE_DATABASE
+    MsSqlDatabaseConfig:
+      properties:
+        connectionsDetails:
+          description: The connection details.
+          items:
+            $ref: '#/components/schemas/ConnectionDetail'
+          type: array
+        dataConsistency:
+          $ref: '#/components/schemas/DataConsistencyEnum'
+        forceFull:
+          description: Indicates whether the policy engine promotes a non-full backup to a full backup when no full backup copy exists.
+          type: boolean
+          x-ppdm-filter: true
+          x-ppdm-sort: true
+        parallelism:
+          description: The parallel streams that are associated with the Oracle or MSSQL policy objective.
+          type: integer
+          x-ppdm-filter: true
+          x-ppdm-sort: true
+        tierAfter:
+          $ref: '#/components/schemas/TierAfter'
+      title: MsSqlDatabaseConfig
+      type: object
+    MsSqlDatabaseOptions:
+      properties:
+        autoPromote:
+          description: Indicate whether to promote non-full to full backup in agent side.
+          type: boolean
+          x-ppdm-filter: true
+          x-ppdm-sort: true
+        backupExpirationDays:
+          description: Backup expiration days.
+          format: int32
+          type: integer
+          x-ppdm-filter: true
+          x-ppdm-sort: true
+        debugEnabled:
+          description: Indicates if logs need to enable DEBUG mode or not. Default to behavior of false if no value is provided.
+          type: boolean
+          x-ppdm-filter: true
+          x-ppdm-sort: true
+        excludeSystemDatabase:
+          description: Indicate whether exclude system database in backup.
+          type: boolean
+          x-ppdm-filter: true
+          x-ppdm-sort: true
+        promotionType:
+          description: "SQL pass thru Option: \nRepresents the backup promotion type when backupLevel is LOG/DIFF_INCR . \n\"ALL\": \tPromote any database that is not eligible for LOG/DIFF backup to a FULL backup. \n\n\"NONE\": \tSkip any database that is not eligible for LOG/DIFF backup.\n\n\"NONE_WITH_WARNINGS\": \tSkip any database that is not eligible for LOG/DIFF backup but provide user a warning.  Warning is provided in the return value.\n\nDefault behavior for SQL AppAgent if promotionType is not supplied is to use \"ALL\""
+          enum:
+          - ALL
+          - NONE
+          - NONE_WITH_WARNINGS
+          type: string
+          x-ppdm-filter: true
+          x-ppdm-sort: true
+        skipSimpleDatabase:
+          description: "SQL pass thru option:\nThe backup promotion behavior for database in SIMPLE recovery model when backupLevel is LOG.\n\nfalse: \tPromote  backup to FULL for database in SIMPLE recovery model if backupLevel specified is LOG.\n\ntrue: \tSkip backup of database in SIMPLE recovery model if backupLevel specified is LOG.\n"
+          type: boolean
+          x-ppdm-filter: true
+          x-ppdm-sort: true
+        skipUnprotectableState:
+          description: Skip the SQL database assets that are in a state that prevents protection from occurring.
+          type: boolean
+          x-ppdm-filter: true
+          x-ppdm-sort: true
+      title: MsSqlDatabaseOptions
+      type: object
+    MsSqlDatabaseProtectionPolicy:
+      allOf:
+      - $ref: '#/components/schemas/ProtectionPolicyCommon'
+      - properties:
+          objectives:
+            description: The objectives.
+            items:
+              $ref: '#/components/schemas/ProtectionMsSqlDatabaseObjective'
+            type: array
+        type: object
+      title: PublicMsSqlDatabasePolicy
+      type: object
+      x-discriminator-value: MICROSOFT_SQL_DATABASE
+    MssqlCopy:
+      allOf:
+      - $ref: '#/components/schemas/CommonCopy'
+      - properties:
+          extendedData:
+            $ref: '#/components/schemas/MssqlExtendedData'
+        type: object
+      title: SQL
+      type: object
+      x-discriminator-value: MICROSOFT_SQL_DATABASE
+    MssqlExtendedData:
+      description: MSSQL Database Extended Data.
+      properties:
+        backupId:
+          type: string
+        ddbeaMetadata:
+          description: Applications Of Interest of ddbeaMetadata
+          properties:
+            applicationsOfInterest:
+              description: Applications Of Interest of ddbeaMetadata.
+              items:
+                properties:
+                  apiVersion:
+                    type: string
+                  name:
+                    type: string
+                  plcCompatible:
+                    type: boolean
+                  version:
+                    type: string
+                type: object
+                x-tags:
+                - Resource
+              type: array
+            copyOnly:
+              description: Whether or not this is a CopyOnly backup impacts dependencyChain.
+              type: boolean
+            ddHostname:
+              description: DD hostname this copy metadata is located on.
+              type: string
+            dependentSequenceNumbers:
+              description: The SequenceNumbers of all backups this one depends on for data consistency.
+              items:
+                type: string
+              type: array
+            mfrExtendedAttribute:
+              properties:
+                directoryPath:
+                  description: directory path where mfr metadata resides.
+                  type: string
+                keys:
+                  description: keys referring to mfr metadata per database.
+                  items:
+                    type: string
+                  type: array
+              type: object
+              x-tags:
+              - Resource
+            namespace:
+              description: DDBEAs namespace.
+              type: string
+            sequenceNumber:
+              description: The SequenceNumber MSSQL uses to identify this particular backup.
+              type: string
+            storageUnit:
+              description: Storage Unit this copy metadata is located on.
+              type: string
+            subspace:
+              description: DDBEAs subspace.
+              type: string
+            transactionId:
+              description: the Transaction ID DDBEA gave this particular backup.
+              type: string
+            user:
+              description: User name of the user who backed up to the storage unit.
+              type: string
+          type: object
+          x-tags:
+          - Resource
+        snapshotMetadata:
+          items:
+            properties:
+              consistencyGroupId:
+                description: consistency group ID XIO ONLY.
+                type: string
+              rpHost:
+                description: RecoverPoint host XIO ONLY.
+                type: string
+              snapshotName:
+                description: name of snapshot.
+                type: string
+              snapshotUser:
+                description: user for snapshot.
+                type: string
+              staticImages:
+                items:
+                  type: string
+                type: array
+            type: object
+            x-tags:
+            - Resource
+          type: array
+        softDelete:
+          description: 'Indicates if this PCS has been soft-deleted as a result of the Secure Delete objective.
+
+            A soft-deleted PCS is a PCS whose backup is actually deleted from the DD but its entry
+
+            is not yet ready to be removed ddbmcon commit from the breadcrumbs.'
+          type: boolean
+      title: SQL Extended Data
+      type: object
+      x-tags:
+      - Resource
+    NasCopy:
+      allOf:
+      - $ref: '#/components/schemas/CommonCopy'
+      - properties:
+          extendedData:
+            $ref: '#/components/schemas/NasExtendedData'
+        type: object
+      title: NAS
+      type: object
+      x-discriminator-value: NAS_SHARE
+    NasExtendedData:
+      description: NAS Extended Data.
+      properties:
+        directoryCount:
+          description: The number folders we are protecting.
+          type: string
+        fileCount:
+          description: The number of NAS files we are protecting.
+          type: string
+        skippedElements:
+          properties:
+            incremental:
+              type: integer
+              x-ppdm-filter: true
+              x-ppdm-sort: true
+            total:
+              type: integer
+              x-ppdm-filter: true
+              x-ppdm-sort: true
+          type: object
+          x-tags:
+          - Resource
+        snapshotMetadata:
+          items:
+            properties:
+              id:
+                description: This represents the ID of the snapshot taken during the NAS Share backup.
+                type: string
+              path:
+                description: This represents the path of the snapshot taken during the NAS Share backup.
+                type: string
+              pathId:
+                description: This represents the path ID of the snapshot taken during the NAS Share backup.
+                type: string
+              snapshotName:
+                description: This represents the name of the snapshot taken during the NAS Share backup.
+                type: string
+            type: object
+            x-tags:
+            - Resource
+          type: array
+      title: NAS Extended Data
+      type: object
+      x-tags:
+      - Resource
+    NasShareConfig:
+      properties:
+        connectionsDetails:
+          description: The connection details.
+          items:
+            $ref: '#/components/schemas/ConnectionDetail'
+          type: array
+        dataConsistency:
+          $ref: '#/components/schemas/DataConsistencyEnum'
+        excludeFilterIds:
+          description: IDs of exclusion filters that are associated with the protection policy.
+          items:
+            type: string
+          type: array
+          x-ppdm-filter: true
+          x-ppdm-sort: true
+        forceFull:
+          description: Indicates whether the policy engine promotes a non-full backup to a full backup when no full backup copy exists.
+          type: boolean
+          x-ppdm-filter: true
+          x-ppdm-sort: true
+        tierAfter:
+          $ref: '#/components/schemas/TierAfter'
+      title: NasShareConfig
+      type: object
+    NasShareOptions:
+      properties:
+        continueOn:
+          description: 'The attribute to control the backup behavior if data or ACLs for files or folders are not getting backed up. Valid values include:
+
+            - ACL_ACCESS_DENIED
+
+            - DATA_ACCESS_DENIED
+
+            - FILENAME_LENGTH_LIMIT_REACHED'
+          items:
+            enum:
+            - ACL_ACCESS_DENIED
+            - DATA_ACCESS_DENIED
+            - FILENAME_LENGTH_LIMIT_REACHED
+            type: string
+          type: array
+          x-ppdm-filter: true
+          x-ppdm-sort: true
+        debugEnabled:
+          description: Indicates if logs need to enable DEBUG mode or not. Default to behavior of false if no value is provided.
+          type: boolean
+          x-ppdm-filter: true
+          x-ppdm-sort: true
+        indexingEnabled:
+          description: 'Indicates if the protection policy for NAS assets enables the metadata indexing for backup. Default to behavior of false if no value is provided.
+
+            - false: No indexing for a backup copy
+
+            - true: Indexing for the backup copy'
+          type: boolean
+          x-ppdm-filter: true
+          x-ppdm-sort: true
+        skipOn:
+          description: 'The attribute to control the backup behavior. Valid values include:
+
+            - FILENAME_LENGTH_LIMIT_REACHED'
+          items:
+            enum:
+            - FILENAME_LENGTH_LIMIT_REACHED
+            type: string
+          type: array
+          x-ppdm-filter: true
+          x-ppdm-sort: true
+      title: NasShareOptions
+      type: object
+    NasShareProtectionPolicy:
+      allOf:
+      - $ref: '#/components/schemas/ProtectionPolicyCommon'
+      - properties:
+          objectives:
+            description: The objectives.
+            items:
+              $ref: '#/components/schemas/ProtectionNasShareObjective'
+            type: array
+        type: object
+      title: PublicNasSharePolicy
+      type: object
+      x-discriminator-value: NAS_SHARE
+    OracleCopy:
+      allOf:
+      - $ref: '#/components/schemas/CommonCopy'
+      - properties:
+          extendedData:
+            $ref: '#/components/schemas/OracleExtendedData'
+        type: object
+      title: Oracle
+      type: object
+      x-discriminator-value: ORACLE_DATABASE
+    OracleDatabaseConfig:
+      properties:
+        backupMechanism:
+          description: 'Backup mechanism allowed for assetType ORACLE_DATABASE. The valid values are the following:
+
+            - SBT: Choose this value to use the original backup technology.
+
+            - OIM: ORACLE incremental merge. This value creates a copy of the database, and it can apply the incremental changes to the database periodically to update the image copy.'
+          enum:
+          - SBT
+          - OIM
+          type: string
+          x-ppdm-filter: true
+          x-ppdm-sort: true
+        connectionsDetails:
+          description: The connection details.
+          items:
+            $ref: '#/components/schemas/ConnectionDetail'
+          type: array
+        dataConsistency:
+          $ref: '#/components/schemas/DataConsistencyEnum'
+        forceFull:
+          description: Indicates whether the policy engine promotes a non-full backup to a full backup when no full backup copy exists.
+          type: boolean
+          x-ppdm-filter: true
+          x-ppdm-sort: true
+        parallelism:
+          description: The parallel streams that are associated with the Oracle or MSSQL policy objective.
+          type: integer
+          x-ppdm-filter: true
+          x-ppdm-sort: true
+        tierAfter:
+          $ref: '#/components/schemas/TierAfter'
+      title: OracleDatabaseConfig
+      type: object
+    OracleDatabaseOptions:
+      properties:
+        archiveLogDeletionDays:
+          description: Number of days to delete archive Log.
+          format: int32
+          type: integer
+          x-ppdm-filter: true
+          x-ppdm-sort: true
+        blockSize:
+          description: The block size is the number of bytes of data that the Oracle database reads for backup operation.
+          type: string
+          x-ppdm-filter: true
+          x-ppdm-sort: true
+        debugEnabled:
+          description: Indicates if logs need to enable DEBUG mode or not. Default to behavior of false if no value is provided.
+          type: boolean
+          x-ppdm-filter: true
+          x-ppdm-sort: true
+        filesPerSet:
+          description: 'Specifies the maximum number of files to place in a backup set. The default value for FILESPERSET is the lower of these two values: 64, and the number of files/channel.'
+          type: integer
+          x-ppdm-filter: true
+          x-ppdm-sort: true
+        maximumOpenFiles:
+          description: Determines the maximum number of input files that a backup or copy can have open at a given time (default value is 8).
+          type: integer
+          x-ppdm-filter: true
+          x-ppdm-sort: true
+        sectionSize:
+          description: Specifies the SECTION SIZE parameter for multisection backups. The SECTION SIZE parameter enables RMAN to create a multisection backup.
+          type: string
+          x-ppdm-filter: true
+          x-ppdm-sort: true
+        syncCatalog:
+          description: "The attribute to control different recovery catalog options. Valid values include:\n  -NONE: This option is to not sync recovery catalog with control file.\n  -SYNC: This option is to sync recovery catalog with control file. synchronously after backup.\n  -ASYNC: This option is to sync recovery catalog with control file. asynchronously after backup."
+          enum:
+          - NONE
+          - SYNC
+          - ASYNC
+          type: string
+          x-ppdm-filter: true
+          x-ppdm-sort: true
+      title: OracleDatabaseOptions
+      type: object
+    OracleDatabaseProtectionPolicy:
+      allOf:
+      - $ref: '#/components/schemas/ProtectionPolicyCommon'
+      - properties:
+          objectives:
+            description: The objectives.
+            items:
+              $ref: '#/components/schemas/ProtectionOracleDatabaseObjective'
+            type: array
+        type: object
+      title: PublicOracleDatabasePolicy
+      type: object
+      x-discriminator-value: ORACLE_DATABASE
+    OracleExtendedData:
+      description: Oracle Extended Data.
+      properties:
+        backupMechanism:
+          enum:
+          - OIM
+          - SBT
+          type: string
+          x-ppdm-filter: true
+          x-ppdm-sort: true
+        backupObject:
+          enum:
+          - PDB
+          - CDB
+          - DATABASE
+          type: string
+        backupPieces:
+          items:
+            type: string
+          type: array
+        controlSpFileInfo:
+          description: Relative Path of SPFile, Control File and Autobackup File pieces.
+          properties:
+            autoBackupPath:
+              type: string
+            controlFilePath:
+              type: string
+            spFilePath:
+              type: string
+          type: object
+          x-tags:
+          - Resource
+        copyNumber:
+          type: string
+        ddbeaMetadata:
+          properties:
+            applicationsOfInterest:
+              items:
+                properties:
+                  apiVersion:
+                    type: string
+                  name:
+                    type: string
+                  plcCompatible:
+                    type: boolean
+                  version:
+                    type: string
+                type: object
+                x-tags:
+                - Resource
+              type: array
+            ddHostname:
+              type: string
+            storageUnit:
+              type: string
+            transactionId:
+              type: string
+            user:
+              type: string
+          type: object
+          x-tags:
+          - Resource
+        dependentLogNaturalIds:
+          items:
+            items:
+              type: string
+            type: array
+          type: array
+        dependentLogs:
+          items:
+            type: string
+          type: array
+        firstScn:
+          format: int64
+          type: integer
+        followControlFile:
+          type: boolean
+        followSpFile:
+          type: boolean
+        hasControlFile:
+          description: Indicates if the Controlfile is part of the copy.
+          type: boolean
+        hasSpFile:
+          description: Indicates if the SPFile is part of the copy.
+          type: boolean
+        incarnationNumber:
+          format: int64
+          type: integer
+        jobId:
+          format: int64
+          type: integer
+        lastScn:
+          format: int64
+          type: integer
+        mountPath:
+          description: Mount Path used for the backup for Oracle OIM.
+          type: string
+          x-ppdm-filter: false
+          x-ppdm-sort: false
+        protocol:
+          description: Oracle OIM mount operation protocol.
+          enum:
+          - BOOSTFS
+          - NFS
+          - DDBOOST
+          type: string
+          x-ppdm-filter: false
+          x-ppdm-sort: false
+        rmanCatalog:
+          type: string
+        thread:
+          type: string
+      title: Oracle Extended Data
+      type: object
+      x-tags:
+      - Resource
+    PageInfo:
+      description: The page information that is usually used to describe the content of an API response, including page number, page size, total elements count, and total page count.
+      properties:
+        maxPageableElements:
+          description: The max number of pageable elements.
+          type: integer
+        number:
+          description: The page number.
+          type: integer
+        queryState:
+          description: The query token. Only used for serial query. Under Tasks, see *Page the result*.
+          type: string
+        size:
+          description: The number of elements on each page.
+          type: integer
+        totalElements:
+          description: The total number of elements across all pages.
+          type: integer
+        totalPages:
+          description: The total number of pages.
+          type: integer
+      type: object
+    PaginatedCopyList:
+      properties:
+        content:
+          items:
+            $ref: '#/components/schemas/Copy'
+          type: array
+        page:
+          $ref: '#/components/schemas/PageInfo'
+      title: PaginatedCopyList
+      type: object
+    PoliciesBatchRequest:
+      description: Item of policy batch request.
+      properties:
+        body:
+          $ref: '#/components/schemas/PoliciesBatchRequestBody'
+        id:
+          description: Request ID.
+          type: string
+      type: object
+    PoliciesBatchRequestBody:
+      description: Request body content.
+      properties:
+        disabled:
+          description: 'Indicates whether the protection policy is enabled or disabled:
+
+            - true: Disables the protection policy.
+
+            - false: Enables the protection policy.'
+          type: boolean
+        id:
+          description: UUID of the policy.
+          type: string
+      type: object
+    PoliciesBatchRequests:
+      description: Policies batch request body.
+      properties:
+        requests:
+          items:
+            $ref: '#/components/schemas/PoliciesBatchRequest'
+          type: array
+      type: object
+    PoliciesBatchResponse:
+      properties:
+        body:
+          $ref: '#/components/schemas/ErrorMessage'
+        id:
+          type: string
+        status:
+          type: integer
+      type: object
+    PoliciesBatchResponses:
+      properties:
+        responses:
+          items:
+            $ref: '#/components/schemas/PoliciesBatchResponse'
+          type: array
+      type: object
+    PowerMaxBlockConfig:
+      properties:
+        backupSite:
+          $ref: '#/components/schemas/BackupSiteEnum'
+        dataConsistency:
+          $ref: '#/components/schemas/DataConsistencyEnum'
+        forceFull:
+          description: Indicates whether the policy engine promotes a non-full backup to a full backup when no full backup copy exists.
+          type: boolean
+          x-ppdm-filter: true
+          x-ppdm-sort: true
+        tierAfter:
+          $ref: '#/components/schemas/TierAfter'
+      title: PowerMaxBlockConfig
+      type: object
+    PowerMaxBlockCopy:
+      allOf:
+      - $ref: '#/components/schemas/CommonCopy'
+      - properties:
+          extendedData:
+            $ref: '#/components/schemas/PowerMaxBlockExtendedData'
+        type: object
+      title: Power Max Block
+      type: object
+      x-discriminator-value: POWER_MAX_BLOCK
+    PowerMaxBlockExtendedData:
+      description: PowerMaxBlock extended data.
+      properties:
+        provisionedBytes:
+          format: int64
+          type: integer
+        scriptExecution:
+          $ref: '#/components/schemas/ScriptExecution'
+      title: Power Max Block Extended Data
+      type: object
+      x-tags:
+      - Resource
+    PowerMaxBlockProtectionPolicy:
+      allOf:
+      - $ref: '#/components/schemas/ProtectionPolicyCommon'
+      - properties:
+          objectives:
+            description: The PowerMax Block objectives.
+            items:
+              $ref: '#/components/schemas/ProtectionPowerMaxBlockObjective'
+            type: array
+        type: object
+      title: PublicPowerMaxBlockPolicy
+      type: object
+      x-discriminator-value: POWER_MAX_BLOCK
+    PowerStoreBlockConfig:
+      properties:
+        backupSite:
+          $ref: '#/components/schemas/BackupSiteEnum'
+        dataConsistency:
+          $ref: '#/components/schemas/DataConsistencyEnum'
+        forceFull:
+          description: Indicates whether the policy engine promotes a non-full backup to a full backup when no full backup copy exists.
+          type: boolean
+          x-ppdm-filter: true
+          x-ppdm-sort: true
+        tierAfter:
+          $ref: '#/components/schemas/TierAfter'
+      title: PowerStoreBlockConfig
+      type: object
+    PowerStoreBlockCopy:
+      allOf:
+      - $ref: '#/components/schemas/CommonCopy'
+      - properties:
+          extendedData:
+            $ref: '#/components/schemas/PowerStoreBlockExtendedData'
+        type: object
+      title: Power Store Block
+      type: object
+      x-discriminator-value: POWERSTORE_BLOCK
+    PowerStoreBlockExtendedData:
+      description: PowerStoreBlock extended data.
+      properties:
+        provisionedBytes:
+          format: int64
+          type: integer
+        scriptExecution:
+          $ref: '#/components/schemas/ScriptExecution'
+      title: Power Store Block Extended Data
+      type: object
+      x-tags:
+      - Resource
+    PowerStoreBlockOptions:
+      properties:
+        debugEnabled:
+          description: Indicates if logs need to enable DEBUG mode or not. Default to behavior of false if no value is provided.
+          type: boolean
+          x-ppdm-filter: true
+          x-ppdm-sort: true
+      title: PowerStoreBlockOptions
+      type: object
+    PowerStoreBlockProtectionPolicy:
+      allOf:
+      - $ref: '#/components/schemas/ProtectionPolicyCommon'
+      - properties:
+          objectives:
+            description: The objectives.
+            items:
+              $ref: '#/components/schemas/ProtectionPowerStoreBlockObjective'
+            type: array
+        type: object
+      title: PublicPowerStoreBlockPolicy
+      type: object
+      x-discriminator-value: POWERSTORE_BLOCK
+    ProtectionAddress:
+      properties:
+        type:
+          description: The type of the network address.
+          enum:
+          - IPV4
+          - IPV6
+          - FQDN
+          type: string
+          x-ppdm-filter: true
+          x-ppdm-sort: true
+        value:
+          description: The type of the network address.
+          type: string
+          x-ppdm-filter: true
+          x-ppdm-sort: true
+      title: address
+      type: object
+    ProtectionCloudDirectorVAppObjective:
+      allOf:
+      - $ref: '#/components/schemas/ProtectionObjectiveCommon'
+      - properties:
+          config:
+            $ref: '#/components/schemas/CloudDirectorVAppConfig'
+          options:
+            $ref: '#/components/schemas/CloudDirectorVAppOptions'
+        type: object
+      title: PublicCloudDirectorVAppObjective
+      type: object
+    ProtectionCloudUnit:
+      description: The cloud unit.
+      properties:
+        name:
+          description: The cloud unit name.
+          type: string
+          x-ppdm-filter: true
+          x-ppdm-sort: true
+      type: object
+    ProtectionConfigurationRequest:
+      description: Protection policy configuration request.
+      properties:
+        policy:
+          properties:
+            id:
+              description: The policy ID.
+              type: string
+          type: object
+    ProtectionConfigurationResponse:
+      description: The response of the protection policy configuration.
+      properties:
+        results:
+          items:
+            $ref: '#/components/schemas/ProtectionConfigurationResult'
+          type: array
+      type: object
+    ProtectionConfigurationResult:
+      properties:
+        activityId:
+          type: string
+        reason:
+          type: string
+        remediation:
+          type: string
+        status:
+          type: string
+      type: object
+    ProtectionConnectionDetail:
+      description: Describes how to connect the assets that are protected by the policy.
+      properties:
+        addresses:
+          description: The network addresses.
+          items:
+            $ref: '#/components/schemas/ProtectionAddress'
+          type: array
+        credentialId:
+          description: The credential ID.
+          type: string
+          x-ppdm-filter: true
+          x-ppdm-sort: true
+        extraParams:
+          description: The extra parameters.
+          items:
+            $ref: '#/components/schemas/ProtectionExtraParam'
+          type: array
+        port:
+          description: The port number.
+          type: integer
+          x-ppdm-filter: true
+          x-ppdm-sort: true
+        protocol:
+          description: The protocol.
+          type: string
+          x-ppdm-filter: true
+          x-ppdm-sort: true
+        type:
+          description: The connection type.
+          enum:
+          - OS
+          - VCENTER
+          - DBUSER
+          - DB_WALLET
+          - RMAN
+          - RMAN_WALLET
+          - DB
+          - SAPHANA_DB_USER
+          - SAPHANA_SYSTEMDB_USER
+          - NAS
+          type: string
+          x-ppdm-filter: true
+          x-ppdm-sort: true
+      type: object
+    ProtectionCopySelectorForOperation:
+      description: The copy selector for the operation.
+      properties:
+        backupLevel:
+          description: The backup level to match copies. Supported values are FULL, DIFFERENTIAL, LOG, INCREMENTAL, CUMULATIVE, SYNTHETIC_FULL.
+          type: string
+          x-ppdm-filter: true
+          x-ppdm-sort: true
+        tags:
+          description: 'The tags used to match copies. This is applicable for the tiering part of copies in the CLOUD_TIER objective. The string format is as follows: For policies with the purpose of SELF_SERVICE, the format is ''RetentionId||<retention ID>'', where the <retention ID> should be an existing ID defined in BACKUP objective retentions. For policies with the purpose of CENTRALIZED, the format is ''OperationId||<operation ID>'', where the <operation ID> should be an existing ID defined in BACKUP objective operations.'
+          items:
+            type: string
+          type: array
+          x-ppdm-filter: true
+          x-ppdm-sort: true
+      type: object
+    ProtectionCopySelectorForRetention:
+      description: The copy selector for the retention setting.
+      properties:
+        backupLevel:
+          description: The backup level to match copies. This should be an existed objective in the policy. Allowed objectives are BACKUP, SNAPSHOT, REPLICATION.
+          type: string
+          x-ppdm-filter: true
+          x-ppdm-sort: true
+        operationId:
+          description: The operation ID used for matching copies. This parameter is specific to the BACKUP objective and must correspond to an existing operation ID.
+          type: string
+          x-ppdm-filter: true
+          x-ppdm-sort: true
+        tags:
+          description: 'The tags used for matching copies, specifically for retention time matching in REPLICATION objectives. The string follows this format: ''RetentionId||<retention ID>'' for policies with the purpose of SELF_SERVICE, where the <retention ID> should be an existing ID defined in BACKUP objective retentions. For policies with the purpose of CENTRALIZED, the format is ''OperationId||<operation ID>'', where the <operation ID> should be an existing ID defined in BACKUP objective operations.'
+          items:
+            type: string
+          type: array
+          x-ppdm-filter: true
+          x-ppdm-sort: true
+        timePattern:
+          $ref: '#/components/schemas/ProtectionTimePattern'
+      type: object
+    ProtectionEngineType:
+      description: The protection engine flow that creates this copy.
+      enum:
+      - VMDIRECT
+      - APPDIRECT
+      - HYPERVISORDIRECT
+      title: ProtectionEngineType
+      type: string
+      x-ppdm-filter: true
+      x-ppdm-sort: true
+    ProtectionExtraParam:
+      properties:
+        name:
+          description: The name of the parameter.
+          type: string
+          x-ppdm-filter: true
+          x-ppdm-sort: true
+        value:
+          description: The value of the parameter.
+          type: string
+          x-ppdm-filter: true
+          x-ppdm-sort: true
+      title: extraParam
+      type: object
+    ProtectionFileSystemObjective:
+      allOf:
+      - $ref: '#/components/schemas/ProtectionObjectiveCommon'
+      - properties:
+          config:
+            $ref: '#/components/schemas/FileSystemConfig'
+          options:
+            $ref: '#/components/schemas/FileSystemOptions'
+        type: object
+      title: PublicFileSystemObjective
+      type: object
+    ProtectionGroupRef:
+      properties:
+        backupStrategy:
+          $ref: '#/components/schemas/BackupStrategy'
+        id:
+          description: The protection group ID.
+          type: string
+          x-ppdm-filter: true
+          x-ppdm-sort: true
+      title: ProtectionGroupRef
+      type: object
+      x-tags:
+      - Resource
+    ProtectionHypervVirtualMachineObjective:
+      allOf:
+      - $ref: '#/components/schemas/ProtectionObjectiveCommon'
+      - properties:
+          config:
+            $ref: '#/components/schemas/HypervVirtualMachineConfig'
+          options:
+            $ref: '#/components/schemas/HypervVirtualMachineOptions'
+        type: object
+      title: PublicHypervVirtualMachineObjective
+      type: object
+    ProtectionKubernetesObjective:
+      allOf:
+      - $ref: '#/components/schemas/ProtectionObjectiveCommon'
+      - properties:
+          config:
+            $ref: '#/components/schemas/KubernetesConfig'
+        type: object
+      title: PublicKubernetesObjective
+      type: object
+    ProtectionMsExchangeDatabaseObjective:
+      allOf:
+      - $ref: '#/components/schemas/ProtectionObjectiveCommon'
+      - properties:
+          config:
+            $ref: '#/components/schemas/MsExchangeDatabaseConfig'
+          options:
+            $ref: '#/components/schemas/MsExchangeDatabaseOptions'
+        type: object
+      title: PublicMsExchangeDatabaseObjective
+      type: object
+    ProtectionMsSqlDatabaseObjective:
+      allOf:
+      - $ref: '#/components/schemas/ProtectionObjectiveCommon'
+      - properties:
+          config:
+            $ref: '#/components/schemas/MsSqlDatabaseConfig'
+          options:
+            $ref: '#/components/schemas/MsSqlDatabaseOptions'
+        type: object
+      title: PublicMsSqlDatabaseObjective
+      type: object
+    ProtectionNasShareObjective:
+      allOf:
+      - $ref: '#/components/schemas/ProtectionObjectiveCommon'
+      - properties:
+          config:
+            $ref: '#/components/schemas/NasShareConfig'
+          options:
+            $ref: '#/components/schemas/NasShareOptions'
+        type: object
+      title: PublicNasShareObjective
+      type: object
+    ProtectionNowCopyDirective:
+      properties:
+        type:
+          enum:
+          - MARK_SKIPPED_COPIES
+          type: string
+        value:
+          type: string
+      type: object
+    ProtectionNowCopySelectorInOption:
+      properties:
+        type:
+          enum:
+          - LAST_N_DAYS
+          - LAST_N_COPIES
+          type: string
+        value:
+          items:
+            type: string
+          type: array
+      type: object
+    ProtectionNowObjective:
+      properties:
+        id:
+          description: The objective ID in policy. This should be an existed objective in the policy.
+          type: string
+        operation:
+          $ref: '#/components/schemas/ProtectionNowOperation'
+        options:
+          $ref: '#/components/schemas/ProtectionNowOption'
+        retentions:
+          items:
+            $ref: '#/components/schemas/ProtectionNowRetention'
+          maxItems: 18
+          type: array
+      type: object
+    ProtectionNowOperation:
+      properties:
+        backupLevel:
+          enum:
+          - FULL
+          - DIFFERENTIAL
+          - LOG
+          - INCREMENTAL
+          - CUMULATIVE
+          - SYNTHETIC_FULL
+          type: string
+      type: object
+    ProtectionNowOption:
+      properties:
+        copyDirectives:
+          items:
+            $ref: '#/components/schemas/ProtectionNowCopyDirective'
+          type: array
+        copySelectors:
+          items:
+            $ref: '#/components/schemas/ProtectionNowCopySelectorInOption'
+          type: array
+      type: object
+    ProtectionNowPolicyObject:
+      properties:
+        id:
+          description: The policy ID.
+          type: string
+        objectives:
+          items:
+            $ref: '#/components/schemas/ProtectionNowObjective'
+          type: array
+      type: object
+    ProtectionNowRequest:
+      description: Manual protection request body.
+      properties:
+        policy:
+          $ref: '#/components/schemas/ProtectionNowPolicyObject'
+        source:
+          $ref: '#/components/schemas/Source'
+      title: ProtectionNowRequest
+      type: object
+    ProtectionNowResponse:
+      description: The response associated with the protection now request.
+      properties:
+        results:
+          items:
+            $ref: '#/components/schemas/ProtectionNowResponseBody'
+          type: array
+      title: ProtectionNowResponse
+      type: object
+    ProtectionNowResponseBody:
+      properties:
+        activityId:
+          type: string
+        objectiveId:
+          type: string
+        reason:
+          type: string
+        remediation:
+          type: string
+        status:
+          type: string
+      type: object
+    ProtectionNowRetention:
+      properties:
+        copySelector:
+          properties:
+            backupLevel:
+              description: Supported values are FULL, DIFFERENTIAL, LOG, INCREMENTAL, CUMULATIVE, SYNTHETIC_FULL.
+              type: string
+          type: object
+        time:
+          items:
+            $ref: '#/components/schemas/ProtectionNowRetentionTimeObject'
+          maxItems: 2
+          type: array
+      type: object
+    ProtectionNowRetentionTimeObject:
+      properties:
+        type:
+          description: Supported values are RETENTION, RETENTION_AND_LOCK.
+          enum:
+          - RETENTION
+          - LOCK
+          - RETENTION_AND_LOCK
+          type: string
+        unitType:
+          enum:
+          - DAY
+          - WEEK
+          - MONTH
+          - YEAR
+          type: string
+        unitValue:
+          format: int32
+          minimum: 1
+          type: integer
+      type: object
+    ProtectionObjectiveCommon:
+      description: The base information of objective.
+      properties:
+        createdAt:
+          description: The time when the objective is created at.
+          format: date-time
+          type: string
+          x-ppdm-filter: true
+          x-ppdm-sort: true
+        id:
+          description: The unique ID of the objective. This parameter is required for POST or PATCH requests.
+          type: string
+          x-ppdm-filter: true
+          x-ppdm-sort: true
+        operations:
+          description: The operations.
+          items:
+            $ref: '#/components/schemas/ProtectionOperation'
+          type: array
+        retentions:
+          description: The retentions.
+          items:
+            $ref: '#/components/schemas/ProtectionRetention'
+          type: array
+        target:
+          $ref: '#/components/schemas/ProtectionTarget'
+        type:
+          description: The type of the objective. This parameter is required for POST or PATCH requests.
+          enum:
+          - BACKUP
+          - SNAPSHOT
+          - REPLICATION
+          - CLOUD_TIER
+          - CLOUD_DR
+          - VAULT
+          type: string
+          x-ppdm-filter: true
+          x-ppdm-sort: true
+        updatedAt:
+          description: The time when the objective is updated at.
+          format: date-time
+          type: string
+          x-ppdm-filter: true
+          x-ppdm-sort: true
+      type: object
+    ProtectionOperation:
+      description: The operation.
+      properties:
+        backupLevel:
+          description: The backup level.
+          enum:
+          - FULL
+          - SYNTHETIC_FULL
+          - DIFFERENTIAL
+          - LOG
+          - INCREMENTAL
+          - CUMULATIVE
+          type: string
+          x-ppdm-filter: true
+          x-ppdm-sort: true
+        copySelector:
+          $ref: '#/components/schemas/ProtectionCopySelectorForOperation'
+        id:
+          description: The unique ID of the operation.
+          type: string
+          x-ppdm-filter: true
+          x-ppdm-sort: true
+        schedule:
+          $ref: '#/components/schemas/ProtectionSchedule'
+        triggerType:
+          description: 'The trigger type determines the method used to initiate the operation. This specification applies to both REPLICATION and CLOUD_DR objectives.
+
+            - For the REPLICATION objective, the trigger type can either be ON_SCHEDULE or RUN_AFTER_UPSTREAM. When set to ON_SCHEDULE, a schedule must be configured to initiate the replication. Alternatively, setting it to RUN_AFTER_UPSTREAM initiates replication immediately after the backup completes.
+
+            - For the CLOUD_DR objective, the trigger type should be set to RUN_AFTER_UPSTREAM.'
+          enum:
+          - ON_SCHEDULE
+          - ON_DEMAND
+          - RUN_AFTER_UPSTREAM
+          - RUN_WITH_UPSTREAM
+          type: string
+          x-ppdm-filter: true
+          x-ppdm-sort: true
+        upstream:
+          $ref: '#/components/schemas/ProtectionUpstream'
+      type: object
+    ProtectionOracleDatabaseObjective:
+      allOf:
+      - $ref: '#/components/schemas/ProtectionObjectiveCommon'
+      - properties:
+          config:
+            $ref: '#/components/schemas/OracleDatabaseConfig'
+          options:
+            $ref: '#/components/schemas/OracleDatabaseOptions'
+        type: object
+      title: PublicOracleObjective
+      type: object
+    ProtectionPolicies:
+      description: A paged response of policies for public API.
+      properties:
+        content:
+          items:
+            $ref: '#/components/schemas/ProtectionPolicy'
+          type: array
+        page:
+          $ref: '#/components/schemas/PageInfo'
+      type: object
+    ProtectionPolicy:
+      description: The policy for public API.
+      discriminator:
+        mapping:
+          CLOUD_DIRECTOR_VAPP: '#/components/schemas/CloudDirectorVAppProtectionPolicy'
+          FILE_SYSTEM: '#/components/schemas/FileSystemProtectionPolicy'
+          HYPERV_VIRTUAL_MACHINE: '#/components/schemas/HypervVirtualMachineProtectionPolicy'
+          KUBERNETES: '#/components/schemas/KubernetesProtectionPolicy'
+          MICROSOFT_EXCHANGE_DATABASE: '#/components/schemas/MsExchangeDatabaseProtectionPolicy'
+          MICROSOFT_SQL_DATABASE: '#/components/schemas/MsSqlDatabaseProtectionPolicy'
+          NAS_SHARE: '#/components/schemas/NasShareProtectionPolicy'
+          ORACLE_DATABASE: '#/components/schemas/OracleDatabaseProtectionPolicy'
+          POWERSTORE_BLOCK: '#/components/schemas/PowerStoreBlockProtectionPolicy'
+          POWER_MAX_BLOCK: '#/components/schemas/PowerMaxBlockProtectionPolicy'
+          SAP_HANA_DATABASE: '#/components/schemas/SapHanaDatabaseProtectionPolicy'
+          VMWARE_VIRTUAL_MACHINE: '#/components/schemas/VmwVirtualMachineProtectionPolicy'
+        propertyName: assetType
+      oneOf:
+      - $ref: '#/components/schemas/PowerStoreBlockProtectionPolicy'
+      - $ref: '#/components/schemas/VmwVirtualMachineProtectionPolicy'
+      - $ref: '#/components/schemas/OracleDatabaseProtectionPolicy'
+      - $ref: '#/components/schemas/MsSqlDatabaseProtectionPolicy'
+      - $ref: '#/components/schemas/FileSystemProtectionPolicy'
+      - $ref: '#/components/schemas/KubernetesProtectionPolicy'
+      - $ref: '#/components/schemas/SapHanaDatabaseProtectionPolicy'
+      - $ref: '#/components/schemas/MsExchangeDatabaseProtectionPolicy'
+      - $ref: '#/components/schemas/NasShareProtectionPolicy'
+      - $ref: '#/components/schemas/CloudDirectorVAppProtectionPolicy'
+      - $ref: '#/components/schemas/PowerMaxBlockProtectionPolicy'
+      - $ref: '#/components/schemas/HypervVirtualMachineProtectionPolicy'
+    ProtectionPolicyCommon:
+      description: The common fields of all kinds of policies.
+      properties:
+        assetType:
+          description: "The asset type which is protected by the policy. Allowed Values: \nPOWERSTORE_BLOCK, VMWARE_VIRTUAL_MACHINE, ORACLE_DATABASE,\nMICROSOFT_SQL_DATABASE, FILE_SYSTEM, KUBERNETES, SAP_HANA_DATABASE, MICROSOFT_EXCHANGE_DATABASE, \nNAS_SHARE, CLOUD_DIRECTOR_VAPP, POWER_MAX_BLOCK, HYPERV_VIRTUAL_MACHINE"
+          type: string
+          x-ppdm-filter: true
+          x-ppdm-sort: true
+        createdAt:
+          description: The time when the policy is created.
+          format: date-time
+          type: string
+          x-ppdm-filter: true
+          x-ppdm-sort: true
+        description:
+          description: An optional description for the policy.
+          maxLength: 256
+          type: string
+          x-ppdm-filter: true
+          x-ppdm-sort: true
+        disabled:
+          description: Indicate if the policy is disabled or not. The default value is false, indicating that the policy is enabled by default.
+          type: boolean
+          x-ppdm-filter: true
+          x-ppdm-sort: true
+        id:
+          description: The unique ID of the policy. This should be null at POST.
+          type: string
+          x-ppdm-filter: true
+          x-ppdm-sort: true
+        name:
+          description: User customized name for the policy. This must be unique in PPDM scope.
+          maxLength: 150
+          minLength: 1
+          type: string
+          x-ppdm-filter: true
+          x-ppdm-sort: true
+        purpose:
+          description: The purpose of the policy. This parameter is required and cannot be changed via PATCH requests.
+          enum:
+          - EXCLUSION
+          - SELF_SERVICE
+          - CENTRALIZED
+          type: string
+          x-ppdm-filter: true
+          x-ppdm-sort: true
+        updatedAt:
+          description: The time when the policy is updated.
+          format: date-time
+          type: string
+          x-ppdm-filter: true
+          x-ppdm-sort: true
+      required:
+      - assetType
+      title: AggregatePolicyProperties
+      type: object
+    ProtectionPolicySetting:
+      description: The common setting that the protection policy supports.
+      properties:
+        disabledOpsOnPolicyDisable:
+          description: Stops related schedule jobs from starting when the policy is disabled.
+          items:
+            enum:
+            - BACKUP
+            - SNAPSHOT
+            - REPLICATION
+            - CLOUD_TIER
+            - VALIDATE
+            type: string
+          type: array
+        maxPolicyNumber:
+          description: Maximum number of policies that could be generated.
+          maximum: 1024
+          minimum: 768
+          type: integer
+      type: object
+    ProtectionPolicyStage:
+      description: The protection policy stage of copy.
+      properties:
+        id:
+          type: string
+          x-ppdm-filter: true
+          x-ppdm-sort: true
+        ownedTime:
+          description: The owned time for this protection policy stage, that is persisted with millisecond-level. For example, a time value such as '2024-03-19T14:15:123456789Z' would be truncated to '2024-03-19T14:15:123Z'.
+          format: date-time
+          type: string
+          x-ppdm-filter: true
+          x-ppdm-sort: true
+        type:
+          enum:
+          - PROTECTION
+          - PROMOTION
+          - REPLICATION
+          - CLOUD_TIER
+          - PRIMARY
+          - CDR
+          - SNAPSHOT
+          - VAULT
+          - ARCHIVE
+          - OTHERS
+          - ALL
+          type: string
+          x-ppdm-filter: true
+          x-ppdm-sort: true
+      title: ProtectionPolicyStage
+      type: object
+      x-tags:
+      - Resource
+    ProtectionPolicySummaries:
+      description: A paged response of the protection policy summaries.
+      properties:
+        content:
+          items:
+            $ref: '#/components/schemas/ProtectionPolicySummary'
+          type: array
+        page:
+          $ref: '#/components/schemas/PageInfo'
+      type: object
+    ProtectionPolicySummary:
+      properties:
+        assetType:
+          $ref: '#/components/schemas/AssetType'
+        disabled:
+          description: Indicate if the policy is disabled or not.
+          type: boolean
+          x-ppdm-filter: true
+          x-ppdm-sort: true
+        inComplianceAssets:
+          description: The number of assets in compliance within 24 hours in the policy.
+          format: int32
+          type: integer
+          x-ppdm-filter: true
+          x-ppdm-sort: true
+        lastExecution:
+          $ref: '#/components/schemas/LastExecution'
+        numberOfAssets:
+          description: The number of assets included in the protection policy.
+          format: int32
+          type: integer
+          x-ppdm-filter: true
+          x-ppdm-sort: true
+        numberOfJobFailures:
+          description: The number of job failures for the protection policy in the last 24 hours.
+          format: int32
+          type: integer
+          x-ppdm-filter: true
+          x-ppdm-sort: true
+        outOfComplianceAssets:
+          description: The number of assets out of compliance within 24 hours in the policy.
+          format: int32
+          type: integer
+          x-ppdm-filter: true
+          x-ppdm-sort: true
+        protectionPolicyId:
+          description: ID of the protection policy.
+          type: string
+          x-ppdm-filter: true
+          x-ppdm-sort: false
+        protectionPolicyName:
+          description: The user customized name for the protection policy.
+          type: string
+          x-ppdm-filter: true
+          x-ppdm-sort: true
+        purpose:
+          description: The purpose of the policy.
+          enum:
+          - EXCLUSION
+          - SELF_SERVICE
+          - CENTRALIZED
+          type: string
+          x-ppdm-filter: true
+          x-ppdm-sort: true
+        retentionLockEnabled:
+          description: Indicate if at least one of the policy objective enables the retention lock.
+          type: boolean
+          x-ppdm-filter: true
+          x-ppdm-sort: true
+        totalAssetCapacity:
+          description: The total capacity of assets included in the protection policy.
+          format: int64
+          type: number
+          x-ppdm-filter: true
+          x-ppdm-sort: true
+        totalAssetProtectionCapacity:
+          description: The total protection capacity of assets included in the protection policy.
+          format: int64
+          type: number
+          x-ppdm-filter: true
+          x-ppdm-sort: true
+      type: object
+    ProtectionPowerMaxBlockObjective:
+      allOf:
+      - $ref: '#/components/schemas/ProtectionObjectiveCommon'
+      - properties:
+          config:
+            $ref: '#/components/schemas/PowerMaxBlockConfig'
+        type: object
+      title: PublicPowerMaxBlockObjective
+      type: object
+    ProtectionPowerStoreBlockObjective:
+      allOf:
+      - $ref: '#/components/schemas/ProtectionObjectiveCommon'
+      - properties:
+          config:
+            $ref: '#/components/schemas/PowerStoreBlockConfig'
+          options:
+            $ref: '#/components/schemas/PowerStoreBlockOptions'
+        type: object
+      title: PublicPowerStoreBlockObjective
+      type: object
+    ProtectionRecurrence:
+      description: The recurrence node defines the pattern of the recurrence. Following the pattern, the schedule triggers regularly and considers the window specification.
+      properties:
+        pattern:
+          $ref: '#/components/schemas/ProtectionRecurrencePattern'
+      type: object
+    ProtectionRecurrencePattern:
+      allOf:
+      - $ref: '#/components/schemas/ProtectionTimePatternCommon'
+      - properties:
+          interval:
+            description: 'The interval value large than 1 is applied to MINUTELY and HOURLY types. For other types, no officail support. For example, not support 3 days, 2 months. '
+            maximum: 65535
+            minimum: 1
+            type: integer
+          type:
+            description: The ABSOLUTE property specifies the absolute day (for example, the third day of the month) while the RELATIVE property specifies the relative day (for example, the MONDAY of the first week of the month).
+            enum:
+            - MINUTELY
+            - HOURLY
+            - DAILY
+            - WEEKLY
+            - ABSOLUTE_MONTHLY
+            - RELATIVE_MONTHLY
+            - ABSOLUTE_YEARLY
+            - RELATIVE_YEARLY
+            type: string
+        type: object
+      description: The recurrence pattern
+      type: object
+    ProtectionRetention:
+      description: The retention setting.
+      properties:
+        copySelector:
+          $ref: '#/components/schemas/ProtectionCopySelectorForRetention'
+        id:
+          description: The retention ID.
+          type: string
+          x-ppdm-filter: true
+          x-ppdm-sort: true
+        time:
+          items:
+            $ref: '#/components/schemas/ProtectionRetentionTimeObject'
+          maxItems: 1
+          minItems: 1
+          type: array
+      type: object
+    ProtectionRetentionTimeObject:
+      description: The retention time object.
+      properties:
+        type:
+          description: The type of time this object describe.
+          enum:
+          - RETENTION
+          - LOCK
+          - RETENTION_AND_LOCK
+          type: string
+          x-ppdm-filter: true
+          x-ppdm-sort: true
+        unitType:
+          description: The unit type.
+          enum:
+          - DAY
+          - WEEK
+          - MONTH
+          - YEAR
+          type: string
+          x-ppdm-filter: true
+          x-ppdm-sort: true
+        unitValue:
+          description: The count of unit type.
+          type: integer
+          x-ppdm-filter: true
+          x-ppdm-sort: true
+      type: object
+    ProtectionSapHanaDatabaseObjective:
+      allOf:
+      - $ref: '#/components/schemas/ProtectionObjectiveCommon'
+      - properties:
+          config:
+            $ref: '#/components/schemas/SapHanaDatabaseConfig'
+          options:
+            $ref: '#/components/schemas/SapHanaDatabaseOptions'
+        type: object
+      title: PublicSapHanaDatabaseObjective
+      type: object
+    ProtectionSchedule:
+      description: The schedule defines how and when to run the operation.
+      properties:
+        recurrence:
+          $ref: '#/components/schemas/ProtectionRecurrence'
+        window:
+          $ref: '#/components/schemas/ProtectionWindow'
+      type: object
+    ProtectionTarget:
+      description: The storage target.
+      properties:
+        cloudUnit:
+          $ref: '#/components/schemas/ProtectionCloudUnit'
+        preferredInterfaceId:
+          description: The preferred connection interface ID of the storage system.
+          type: string
+          x-ppdm-filter: true
+          x-ppdm-sort: true
+        storageContainerId:
+          description: The storage container ID. This is a required parameter for all objective types except for SNAPSHOT objectives. For SNAPSHOT objectives, this parameter should be set to null.
+          type: string
+          x-ppdm-filter: true
+          x-ppdm-sort: true
+        storageTargetId:
+          description: The storage target ID. This parameter is optional. If it is not set for a BACKUP or REPLICATION objective, the system will automatically create a storage unit in the designated storage container.
+          type: string
+          x-ppdm-filter: true
+          x-ppdm-sort: true
+      type: object
+    ProtectionTierAfter:
+      description: Specifies when the PowerProtect DD system should tier data to the cloud.
+      properties:
+        unitType:
+          description: The unit type.
+          enum:
+          - DAY
+          - WEEK
+          - MONTH
+          - YEAR
+          type: string
+          x-ppdm-filter: true
+          x-ppdm-sort: true
+        unitValue:
+          description: The unit number.
+          format: int32
+          minimum: 0
+          type: integer
+          x-ppdm-filter: true
+          x-ppdm-sort: true
+      type: object
+    ProtectionTimePattern:
+      allOf:
+      - $ref: '#/components/schemas/ProtectionTimePatternCommon'
+      - properties:
+          type:
+            enum:
+            - WEEKLY
+            - MONTHLY
+            - YEARLY
+            type: string
+        type: object
+      description: This time pattern is used to match the copy creation time.
+      type: object
+    ProtectionTimePatternCommon:
+      properties:
+        dayOfMonth:
+          description: The dayOfMonth property applies to MONTHLY and YEARLY types, positive from beginning, negative from end. For example, 2 indicates the second day of the month, and -1 indicates the last day of the month.
+          maximum: 31
+          minimum: -1
+          type: integer
+        daysOfWeek:
+          description: The daysOfWeek property applies to WEEKLY, MONTHLY, and YEARLY types, and can consist of multiple weekdays.
+          items:
+            enum:
+            - SUNDAY
+            - MONDAY
+            - TUESDAY
+            - WEDNESDAY
+            - THURSDAY
+            - FRIDAY
+            - SATURDAY
+            type: string
+          maxItems: 7
+          type: array
+          uniqueItems: true
+        month:
+          description: The month is applied only to the YEARLY type.
+          enum:
+          - JANUARY
+          - FEBRUARY
+          - MARCH
+          - APRIL
+          - MAY
+          - JUNE
+          - JULY
+          - AUGUST
+          - SEPTEMBER
+          - OCTOBER
+          - NOVEMBER
+          - DECEMBER
+          type: string
+        weekOfMonth:
+          description: Used for monthly or yearly schedule, you can select which week in the month.
+          enum:
+          - FIRST
+          - SECOND
+          - THIRD
+          - FOURTH
+          - LAST
+          type: string
+      title: ProtectionTimePatternCommon
+      type: object
+    ProtectionUpstream:
+      description: The upstream.
+      properties:
+        ids:
+          description: 'The IDs of the upstream objectives. This is mandatory for all objectives except for BACKUP and SNAPSHOT objectives. Only one value is allowed.
+
+            - For REPLICATION and CLOUD_DR objectives, this value should be the BACKUP objective ID.
+
+            - For CLOUD_TIER and VAULT objectives, this value should be either BACKUP or REPLICATION objective ID.
+
+            - For BACKUP and SNAPSHOT objectives, this value should be null.'
+          items:
+            type: string
+          type: array
+          x-ppdm-filter: true
+          x-ppdm-sort: true
+      type: object
+    ProtectionVmwVirtualMachineConfig:
+      properties:
+        backupMechanism:
+          description: "Backup mechanism allowed for assetType VMWARE_VIRTUAL_MACHINE. The valid values are the following:\n- VADM\n- SDM\n  - TSDM can be used for virtual machine crash-consistent policies when the following requirements are met. Otherwise, the data mover type must be VADP: \n      - vCenter or ESXi version 7.0 U3 or later is deployed in the environment.\n      - The Exclude swap files from backup and Enable guest file system quiescing options are disabled.\n  - TSDM can be used for virtual machine SQL AppAware policies when the following requirements are met. Otherwise, the data mover type must be VADP: \n      - vCenter or ESXi version 7.0 U3 or later is deployed in the environment.\n      - The Exclude swap files from backup option is disabled."
+          enum:
+          - VADP
+          - SDM
+          type: string
+          x-ppdm-filter: true
+          x-ppdm-sort: true
+        connectionsDetails:
+          description: The connection details.
+          items:
+            $ref: '#/components/schemas/ProtectionConnectionDetail'
+          type: array
+        dataConsistency:
+          $ref: '#/components/schemas/DataConsistencyEnum'
+        forceFull:
+          description: Indicates whether the policy engine promotes a non-full backup to a full backup when no full backup copy exists.
+          type: boolean
+          x-ppdm-filter: true
+          x-ppdm-sort: true
+        tierAfter:
+          $ref: '#/components/schemas/ProtectionTierAfter'
+      title: ProtectionVmwVirtualMachineConfig
+      type: object
+    ProtectionVmwVirtualMachineObjective:
+      allOf:
+      - $ref: '#/components/schemas/ProtectionObjectiveCommon'
+      - properties:
+          config:
+            $ref: '#/components/schemas/ProtectionVmwVirtualMachineConfig'
+          options:
+            $ref: '#/components/schemas/VmwVirtualMachineOptions'
+        type: object
+      title: PublicVmObjective
+      type: object
+    ProtectionWindow:
+      description: 'The window defines the time range that can be used. When recurrence is not set, one occurrence window is used.
+
+        By default, the "window" node in a schedule specifies an activity window. An activity window indicates that the schedule can only be triggered within this window. Usually, the first trigger time is at the window start time (startTime).
+
+        For minutely or hourly schedules, when the window duration is greater than the minutely or hourly interval, more than one trigger time may occur within the activity window.'
+      properties:
+        duration:
+          description: 'Specifies the duration of the window for a day and the duration cannot exceed 24 hours.
+
+            - It follows the ISO date-time format. For example, a duration of 10 hours will be represented as PT10H.
+
+            - This value is mandatory for centralized backup objectives and scheduled replication objectives.'
+          format: duration
+          type: string
+        startTime:
+          description: 'The date and time when the scheduler window starts. The time is defined with millisecond precision.
+
+            - Though it is permitted to specify a higher precision, such as nanoseconds, the scheduler will not initiate with nanosecond accuracy, and the actual execution will be truncated to milliseconds.
+
+            - This value is mandatory for centralized backup objectives and scheduled replication objectives.'
+          format: date-time
+          type: string
+      type: object
+    Relationship:
+      properties:
+        copyId:
+          description: The ID of the copy that this copy has relationship with.
+          type: string
+        copyNaturalIds:
+          description: The naturalIds of the copy that this copy has relationship with.
+          items:
+            type: string
+          type: array
+        type:
+          $ref: '#/components/schemas/RelationshipType'
+      title: Relationship
+      type: object
+      x-tags:
+      - Resource
+    RelationshipType:
+      description: The relationship type.
+      enum:
+      - PREVIOUS_COPY
+      - FULL_COPY
+      - CONTAINING_FULL_COPY
+      type: string
+      x-ppdm-filter: true
+      x-ppdm-sort: true
+    ReplicaDetail:
+      description: This section is only for replica copy.
+      properties:
+        sourceCopyRef:
+          properties:
+            id:
+              type: string
+          type: object
+          x-tags:
+          - Resource
+        type:
+          $ref: '#/components/schemas/ReplicaType'
+      title: ReplicaDetail
+      type: object
+      x-tags:
+      - Resource
+    ReplicaType:
+      enum:
+      - MTREE
+      - MFR
+      - CDR
+      - OBS
+      type: string
+      x-ppdm-filter: true
+      x-ppdm-sort: true
+    ReplicatedStorageTarget:
+      properties:
+        state:
+          $ref: '#/components/schemas/ReplicatedStorageTargetState'
+        storageTargetRef:
+          $ref: '#/components/schemas/ReplicatedStorageTargetStorageTargetRef'
+      title: ReplicatedStorageTarget
+      type: object
+      x-tags:
+      - Resource
+    ReplicatedStorageTargetState:
+      enum:
+      - SKIPPED
+      - ERROR
+      - REPLICATED
+      - NONE
+      type: string
+      x-ppdm-filter: true
+      x-ppdm-sort: true
+    ReplicatedStorageTargetStorageTargetRef:
+      properties:
+        id:
+          type: string
+      title: ReplicatedStorageTargetStorageTargetRef
+      type: object
+      x-tags:
+      - Resource
+    RestoreTargetCompatibility:
+      properties:
+        compatibilityFailureReason:
+          description: Reason for the compatibility failure.
+          type: string
+        targetName:
+          description: Name of the target.
+          type: string
+        type:
+          $ref: '#/components/schemas/RestoreTargetCompatibilityType'
+      title: RestoreTargetCompatibility
+      type: object
+      x-tags:
+      - Resource
+    RestoreTargetCompatibilityType:
+      description: Type of restore target.
+      enum:
+      - COMPATIBLE
+      - INCOMPATIBLE
+      - UNKNOWN
+      type: string
+    RetentionCycle:
+      description: Copy's retention cycle.
+      enum:
+      - DAILY
+      - WEEKLY
+      - MONTHLY
+      - YEARLY
+      type: string
+      x-ppdm-filter: true
+      x-ppdm-sort: true
+    SapHanaDatabaseConfig:
+      properties:
+        connectionsDetails:
+          description: The connection details.
+          items:
+            $ref: '#/components/schemas/ConnectionDetail'
+          type: array
+        dataConsistency:
+          $ref: '#/components/schemas/DataConsistencyEnum'
+        forceFull:
+          description: Indicates whether the policy engine promotes a non-full backup to a full backup when no full backup copy exists.
+          type: boolean
+          x-ppdm-filter: true
+          x-ppdm-sort: true
+        tierAfter:
+          $ref: '#/components/schemas/TierAfter'
+      title: SapHanaDatabaseConfig
+      type: object
+    SapHanaDatabaseCopy:
+      allOf:
+      - $ref: '#/components/schemas/CommonCopy'
+      title: SAP HANA
+      type: object
+      x-discriminator-value: SAP_HANA_DATABASE
+    SapHanaDatabaseOptions:
+      properties:
+        debugEnabled:
+          description: Indicates if logs need to enable DEBUG mode or not. Default to behavior of false if no value is provided.
+          type: boolean
+          x-ppdm-filter: true
+          x-ppdm-sort: true
+      title: SapHanaDatabaseOptions
+      type: object
+    SapHanaDatabaseProtectionPolicy:
+      allOf:
+      - $ref: '#/components/schemas/ProtectionPolicyCommon'
+      - properties:
+          objectives:
+            description: The objectives.
+            items:
+              $ref: '#/components/schemas/ProtectionSapHanaDatabaseObjective'
+            type: array
+        type: object
+      title: PublicSapHanaDatabasePolicy
+      type: object
+      x-discriminator-value: SAP_HANA_DATABASE
+    ScriptExecution:
+      description: Indicates whether the prescript or the postscript is executed.
+      enum:
+      - PRE_POST_SCRIPT_EXECUTED
+      type: string
+      x-ppdm-filter: true
+      x-ppdm-sort: true
+    Source:
+      description: The objects (assets or asset groups) that we want to protect.
+      properties:
+        assetIds:
+          description: The list of asset IDs that require protection.
+          items:
+            type: string
+          type: array
+        protectionGroupIds:
+          description: The list of protection group IDs that require protection.
+          items:
+            type: string
+          type: array
+      title: Source
+      type: object
+    StorageContainerRef:
+      properties:
+        id:
+          type: string
+          x-ppdm-filter: false
+          x-ppdm-sort: false
+      title: StorageContainerRef
+      type: object
+      x-tags:
+      - Resource
+    StorageDetailWithName:
+      properties:
+        arraySerialNo:
+          description: The storage array serial number.
+          type: string
+        arraySubType:
+          $ref: '#/components/schemas/StorageSystemSubType'
+        storageClass:
+          description: The storage class.
+          type: string
+        storageContainerRef:
+          $ref: '#/components/schemas/StorageContainerRef'
+        storageGroupId:
+          description: The storage group ID.
+          type: string
+        storageTargetRef:
+          $ref: '#/components/schemas/StorageTargetRefWithName'
+      title: StorageDetail
+      type: object
+    StorageSystemSubType:
+      description: The storage array subtype.
+      enum:
+      - DATADOMAINSYSTEM
+      - CDRREGIONSYSTEM
+      - UNITYAPPLIANCE
+      - POWERSTOREAPPLIANCE
+      - POWERSCALEAPPLIANCE
+      - GENERICNASAPPLIANCE
+      - DATADOMAINAPPLIANCEPOOL
+      - POWERMAXSTORAGESYSTEM
+      type: string
+      x-ppdm-filter: true
+      x-ppdm-sort: true
+    StorageTargetRefWithName:
+      properties:
+        id:
+          description: The data target ID.
+          type: string
+          x-ppdm-filter: false
+          x-ppdm-sort: false
+        name:
+          description: The data target name.
+          type: string
+          x-ppdm-filter: false
+          x-ppdm-sort: false
+        namespace:
+          description: Indicates the folder under the storage unit where the backup/catalog files are uploaded.
+          type: string
+      title: StorageTargetRef
+      type: object
+    TierAfter:
+      allOf:
+      - $ref: '#/components/schemas/ProtectionTierAfter'
+      description: Specify the time when DD should move data to cloud tier.
+      type: object
+    TieringDetail:
+      description: The detailed information of cloud tier.
+      properties:
+        cloudProfile:
+          description: The cloud profile.
+          type: string
+        cloudUnit:
+          description: The cloud unit.
+          type: string
+        recalledAt:
+          description: The time when this copy is recalled, that is persisted with millisecond-level. For example, a time value such as '2024-03-19T14:15:123456789Z' would be truncated to '2024-03-19T14:15:123Z'.
+          format: date-time
+          type: string
+        retentionTimeAfterRecall:
+          description: The retention time of this copy after recall, that is persisted with millisecond-level. For example, a time value such as '2024-03-19T14:15:123456789Z' would be truncated to '2024-03-19T14:15:123Z'.
+          format: date-time
+          type: string
+        retieredAt:
+          description: The time when this copy is retiered, that is persisted with millisecond-level. For example, a time value such as '2024-03-19T14:15:123456789Z' would be truncated to '2024-03-19T14:15:123Z'.
+          format: date-time
+          type: string
+        stageId:
+          description: The stage ID.
+          type: string
+        tieredAt:
+          description: The time when this copy is tiered, that is persisted with millisecond-level. For example, a time value such as '2024-03-19T14:15:123456789Z' would be truncated to '2024-03-19T14:15:123Z'.
+          format: date-time
+          type: string
+      title: TieringDetail
+      type: object
+      x-tags:
+      - Resource
+    TriggerType:
+      description: Indicate the copy is generated by adhoc or scheduled backup.
+      enum:
+      - AD_HOC
+      - SCHEDULED
+      type: string
+      x-ppdm-filter: true
+      x-ppdm-sort: true
+    UnavailableReason:
+      properties:
+        description:
+          description: The text that describe why the copy is unavailable.
+          type: string
+          x-ppdm-filter: true
+          x-ppdm-sort: true
+        type:
+          $ref: '#/components/schemas/CopyUnavailableType'
+      title: UnavailableReason
+      type: object
+      x-tags:
+      - Resource
+    VmCopy:
+      allOf:
+      - $ref: '#/components/schemas/CommonCopy'
+      - properties:
+          extendedData:
+            $ref: '#/components/schemas/VmExtendedData'
+        type: object
+      title: Virtual Machine
+      type: object
+      x-discriminator-value: VMWARE_VIRTUAL_MACHINE
+    VmExtendedData:
+      description: VM Extended Data.
+      properties:
+        backupId:
+          description: An opaque identifier used to represent the entire VM backup that contains a full backup of this database.
+          type: string
+        dataMoverType:
+          description: This attribute is to track which data mover was used to create the copy.
+          enum:
+          - INHERIT_FROM_POLICY
+          - SDM
+          - VADP
+          type: string
+        diskBackupCount:
+          description: The number of disks that have been backed up as part of this backup.
+          format: int64
+          type: integer
+        diskTotalCount:
+          description: The total number of disks for the VM.
+          format: int64
+          type: integer
+        disks:
+          items:
+            properties:
+              backupIndex:
+                format: int64
+                type: integer
+                x-ppdm-filter: true
+                x-ppdm-sort: true
+              capacityInBytes:
+                format: int64
+                type: integer
+              controller:
+                format: int64
+                type: integer
+              controllerType:
+                $ref: '#/components/schemas/DiskControllerType'
+              datastoreMoref:
+                description: The moref of the datastore where the VMDK was stored.
+                type: string
+              eagerlyScrub:
+                description: Flag indicates if the disk was eagerly zeroed when provisioned.
+                type: boolean
+              excluded:
+                description: It means if this disk is treated as backup target.
+                type: boolean
+              key:
+                format: int64
+                type: integer
+              label:
+                type: string
+              provisioningType:
+                $ref: '#/components/schemas/DiskProvisioningType'
+              storagePolicyId:
+                description: The UUID of vCenter storage policy assigned to this disk.
+                type: string
+              thinProvisioned:
+                description: Flag indicates if the disk was thin provisioned.
+                type: boolean
+              unitNumber:
+                format: int64
+                type: integer
+              usedBytes:
+                description: Indicates the number of bytes of a virtual disk in-use.
+                format: int64
+                type: integer
+            type: object
+            x-tags:
+            - Resource
+          type: array
+        networks:
+          items:
+            properties:
+              networkKey:
+                type: integer
+              networkLabel:
+                type: string
+              networkMoref:
+                type: string
+            type: object
+            x-tags:
+            - Resource
+          type: array
+        quiesceStatus:
+          enum:
+          - NONE
+          - FULL
+          - COPY
+          type: string
+          x-ppdm-filter: true
+          x-ppdm-sort: true
+        storagePolicyId:
+          description: The UUID of vCenter storage policy assigned to the VM and any non-disk files.
+          type: string
+        syntheticFull:
+          description: A flag indicating whether this copy is a Synthetic Full or a Full (level 0) backup.
+          type: boolean
+        transportModeUsed:
+          description: The transport mode used to transfer the data for this copy (NBD, HotAdd, TransportSnapshotDataMover, NBDSSL)
+          enum:
+          - NBD
+          - HOTADD
+          - TSDM
+          - NBDSSL
+          type: string
+          x-ppdm-filter: true
+          x-ppdm-sort: true
+      title: Virtual Machine Extended Data
+      type: object
+      x-tags:
+      - Resource
+    VmwVirtualMachineOptions:
+      properties:
+        anomalyDetectionEnabled:
+          description: Indicates whether anomaly detection is enabled at the policy level for all the assets. This option can be enabled only when indexingEnabled is enabled.
+          type: boolean
+          x-ppdm-filter: true
+          x-ppdm-sort: true
+        appConsistentProtection:
+          description: If value is true then VM's and Database copies are found then correlate, perform application consistent backups on this virtual machine.
+          type: boolean
+          x-ppdm-filter: true
+          x-ppdm-sort: true
+        backupMode:
+          description: Indicate the backup mode for the asset in protection-policy. FSS - Fixed Size Segment, VSS - Variable Size Segment.
+          enum:
+          - FSS
+          - VSS
+          type: string
+          x-ppdm-filter: true
+          x-ppdm-sort: true
+        debugEnabled:
+          description: Indicates if logs need to enable DEBUG mode or not. Default to behavior of false if no value is provided.
+          type: boolean
+          x-ppdm-filter: true
+          x-ppdm-sort: true
+        disableQuiescing:
+          description: Indicate whether to turn off the quiescing snapshot for VM backups, the default value is false. This option is available only for the primary backup stage of VM Crash Consistent policy.
+          type: boolean
+          x-ppdm-filter: true
+          x-ppdm-sort: true
+        excludeSwapFiles:
+          description: Indicates whether the protection policy is configured with 'excludeSwapFiles'.
+          type: boolean
+          x-ppdm-filter: true
+          x-ppdm-sort: true
+        indexingEnabled:
+          description: Indicate whether the metadata indexing is enabled.
+          type: boolean
+          x-ppdm-filter: true
+          x-ppdm-sort: true
+      title: VmwVirtualMachineOptions
+      type: object
+    VmwVirtualMachineProtectionPolicy:
+      allOf:
+      - $ref: '#/components/schemas/ProtectionPolicyCommon'
+      - properties:
+          objectives:
+            description: The objectives.
+            items:
+              $ref: '#/components/schemas/ProtectionVmwVirtualMachineObjective'
+            type: array
+        type: object
+      title: PublicVmwVirtualMachinePolicy
+      type: object
+      x-discriminator-value: VMWARE_VIRTUAL_MACHINE
+  securitySchemes:
+    BearerAuth:
+      bearerFormat: JWT
+      description: "For accessing the API, a valid JWT token must be passed in all the queries in the 'Authorization' header with the 'Bearer' HTTP authorization schema: \n\n\t'Authorization: Bearer <JWT_token>'"
+      scheme: bearer
+      type: http
+info:
+  contact:
+    name: ''
+  description: PowerProtect Data Manager Public RESTful API
+  title: PowerProtect Data Manager V3
+  version: v3
+openapi: 3.0.1
+paths:
+  /api/v3/avamar-assets:
+    get:
+      description: 'Retrieve a list of all assets across all Avamar inventory sources in the PowerProtect Data Manager system. Passing query parameters that are not documented on this page will result in a 400 error when strict REST API validation is enabled. Additional information can be found in the Getting started - Strict REST API validation documentation.
+
+        > This endpoint supports execution by the following roles: Administrator, User, Restore Administrator, Backup Administrator
+
+        '
+      operationId: getAllAvamarAssets
+      parameters:
+      - $ref: '#/components/parameters/page'
+      - $ref: '#/components/parameters/pageSize'
+      - $ref: '#/components/parameters/filter'
+      - $ref: '#/components/parameters/orderby'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AvamarAssetsPage'
+          description: Successfully returned requested Assets from all Avamar inventory sources.
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+          description: The request is not valid.
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+          description: The requestor is not allowed to perform this operation.
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+          description: The requestor is not authorized to perform this operation.
+        '404':
+          description: The requested inventory source does not exist.
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+          description: An unexpected error prevented the server from fulfilling your request.
+      security:
+      - BearerAuth: []
+      summary: Fetch all assets across all Avamar sources
+      tags:
+      - Avamar Asset Management
+      x-ppdm-executable-roles: admin,readonly,restore_admin,backup_admin
+  /api/v3/avamar-assets/export:
+    get:
+      description: 'Download export file for all assets across all Avamar sources. Passing query parameters that are not documented on this page will result in a 400 error when strict REST API validation is enabled. Additional information can be found in the Getting started - Strict REST API validation documentation.
+
+        > This endpoint supports execution by the following roles: Administrator, User, Restore Administrator, Backup Administrator
+
+        '
+      operationId: exportAllAvamarAssets
+      parameters:
+      - $ref: '#/components/parameters/filter'
+      - $ref: '#/components/parameters/orderby'
+      responses:
+        '200':
+          content:
+            application/octet-stream:
+              schema:
+                format: binary
+                type: string
+          description: Request OK.
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+          description: The request is not valid.
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+          description: The requestor is not allowed to perform this operation.
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+          description: The requestor is not authorized to perform this operation.
+        '404':
+          description: The requested inventory source does not exist.
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+          description: An unexpected error prevented the server from fulfilling your request.
+      security:
+      - BearerAuth: []
+      summary: Download export file for all assets across all Avamar sources.
+      tags:
+      - Avamar Asset Management
+      x-ppdm-executable-roles: admin,readonly,restore_admin,backup_admin
+  /api/v3/avamar-settings:
+    get:
+      description: 'Get the Avamar settings. Passing query parameters that are not documented on this page will result in a 400 error when strict REST API validation is enabled. Additional information can be found in the Getting started - Strict REST API validation documentation.
+
+        > This endpoint supports execution by the following roles: Administrator, User, Backup Administrator
+
+        '
+      operationId: getAvamarSettings
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AvamarSettings'
+          description: OK
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+          description: Unauthorized
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+          description: Forbidden
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+          description: Not Found
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+          description: Internal Server Error
+      security:
+      - BearerAuth: []
+      summary: Get Avamar settings
+      tags:
+      - Avamar Inventory Source Management
+      x-ppdm-executable-roles: admin,readonly,backup_admin
+    patch:
+      description: 'Update the Avamar settings. Passing query parameters that are not documented on this page will result in a 400 error when strict REST API validation is enabled. Additional information can be found in the Getting started - Strict REST API validation documentation.
+
+        > This endpoint supports execution by the following roles: Administrator
+
+        '
+      operationId: updateAvamarSetting
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AvamarSettings'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AvamarSettings'
+          description: OK
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+          description: Bad Request
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+          description: Unauthorized
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+          description: Forbidden
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+          description: Internal Server Error
+      security:
+      - BearerAuth: []
+      summary: Partially update the Avamar setting
+      tags:
+      - Avamar Inventory Source Management
+      x-ppdm-executable-roles: admin
+  /api/v3/avamars:
+    get:
+      description: 'Retrieves all Avamars inventory sources in the PowerProtect Data Manager. Passing query parameters that are not documented on this page will result in a 400 error when strict REST API validation is enabled. Additional information can be found in the Getting started - Strict REST API validation documentation.
+
+        > This endpoint supports execution by the following roles: Administrator, User, Restore Administrator, Backup Administrator
+
+        '
+      operationId: getAllAvamarsInventorySources
+      parameters:
+      - $ref: '#/components/parameters/page'
+      - $ref: '#/components/parameters/pageSize'
+      - $ref: '#/components/parameters/filter'
+      - $ref: '#/components/parameters/orderby'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AvamarInventorySourcesPage'
+          description: Successfully returned available Avamar inventory sources.
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+          description: The request is not valid.
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+          description: The requestor is not allowed to perform this operation.
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+          description: The requestor is not authorized to perform this operation.
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+          description: Internal server error.
+      security:
+      - BearerAuth: []
+      summary: Get all Avamars inventory sources
+      tags:
+      - Avamar Inventory Source Management
+      x-ppdm-executable-roles: admin,readonly,restore_admin,backup_admin
+    post:
+      description: 'Creates an Avamar inventory source. Passing query parameters that are not documented on this page will result in a 400 error when strict REST API validation is enabled. Additional information can be found in the Getting started - Strict REST API validation documentation.
+
+        > This endpoint supports execution by the following roles: Administrator
+
+        '
+      operationId: createAvamarInventorySource
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AvamarCreateRequest'
+        required: true
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Avamar'
+          description: Created
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+          description: The request is not valid.
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+          description: The requestor is not authenticated to perform this operation.
+        '409':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+          description: Conflict. The Avamar inventory source already exists.
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+          description: Internal server error.
+      security:
+      - BearerAuth: []
+      summary: Create a new Avamar inventory source
+      tags:
+      - Avamar Inventory Source Management
+      x-ppdm-executable-roles: admin
+  /api/v3/avamars/{id}:
+    delete:
+      description: 'Deletes an Avamar inventory source by the specified ID. Passing query parameters that are not documented on this page will result in a 400 error when strict REST API validation is enabled. Additional information can be found in the Getting started - Strict REST API validation documentation.
+
+        > This endpoint supports execution by the following roles: Administrator
+
+        '
+      operationId: deleteAvamarInventorySource
+      parameters:
+      - description: The Avamar inventory source ID.
+        in: path
+        name: id
+        required: true
+        schema:
+          type: string
+      responses:
+        '204':
+          description: Successfully deleted the Avamar inventory source.
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+          description: The request is not valid.
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+          description: The requestor is not allowed to perform this operation.
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+          description: The requestor is not authorized to perform this operation.
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+          description: An object with the specified ID is not found.
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+          description: An unexpected error prevented the server from fulfilling your request.
+      security:
+      - BearerAuth: []
+      summary: Delete an Avamar inventory source by ID
+      tags:
+      - Avamar Inventory Source Management
+      x-ppdm-executable-roles: admin
+    get:
+      description: 'Retrieves an Avamar inventory source by ID. Passing query parameters that are not documented on this page will result in a 400 error when strict REST API validation is enabled. Additional information can be found in the Getting started - Strict REST API validation documentation.
+
+        > This endpoint supports execution by the following roles: Administrator, User, Restore Administrator, Backup Administrator
+
+        '
+      operationId: getAvamar
+      parameters:
+      - description: The Avamar inventory source ID.
+        in: path
+        name: id
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Avamar'
+          description: Successfully returned requested Avamar inventory source.
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+          description: The request is not valid.
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+          description: The requestor is not allowed to perform this operation.
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+          description: The requestor is not authorized to perform this operation.
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+          description: An object with the specified ID is not found.
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+          description: An unexpected error prevented the server from fulfilling your request.
+      security:
+      - BearerAuth: []
+      summary: Get an Avamar inventory source by ID
+      tags:
+      - Avamar Inventory Source Management
+      x-ppdm-executable-roles: admin,readonly,restore_admin,backup_admin
+    parameters:
+    - description: The Avamar inventory source ID.
+      in: path
+      name: id
+      required: true
+      schema:
+        type: string
+    patch:
+      description: 'Send a patch request to update the Avamar inventory source. Each patch request sets only one Avamar inventory source by the specified ID. Passing query parameters that are not documented on this page will result in a 400 error when strict REST API validation is enabled. Additional information can be found in the Getting started - Strict REST API validation documentation.
+
+        > This endpoint supports execution by the following roles: Administrator
+
+        '
+      operationId: patchAvamar
+      parameters:
+      - description: The Avamar inventory source ID.
+        in: path
+        name: id
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AvamarPatchRequest'
+        description: The body contains detailed information about the Avamar inventory source to patch.
+        required: false
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Avamar'
+          description: The response shows the Avamar inventory source, including the updated parts.
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+          description: The request is not valid.
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+          description: The requestor is not allowed to perform this operation.
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+          description: The requestor is not authorized to perform this operation.
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+          description: An object with the specified ID is not found.
+        '409':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+          description: Conflict. The Avamar inventory source already exists.
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+          description: An unexpected error prevented the server from fulfilling your request.
+      security:
+      - BearerAuth: []
+      summary: Update an Avamar inventory source
+      tags:
+      - Avamar Inventory Source Management
+      x-codegen-request-body-name: body
+      x-ppdm-executable-roles: admin
+  /api/v3/avamars/{id}/assets/{assetId}/copies:
+    get:
+      description: 'Retrieve all copies of a specific asset from a specific Avamar inventory source. Passing query parameters that are not documented on this page will result in a 400 error when strict REST API validation is enabled. Additional information can be found in the Getting started - Strict REST API validation documentation.
+
+        > This endpoint supports execution by the following roles: Administrator, User, Restore Administrator, Backup Administrator
+
+        '
+      operationId: getAvamarAssetCopies
+      parameters:
+      - $ref: '#/components/parameters/page'
+      - $ref: '#/components/parameters/pageSize'
+      - $ref: '#/components/parameters/filter'
+      - $ref: '#/components/parameters/orderby'
+      - description: The Avamar inventory source ID.
+        in: path
+        name: id
+        required: true
+        schema:
+          type: string
+      - description: The asset ID.
+        in: path
+        name: assetId
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AvamarAssetCopyPage'
+          description: Successfully returned requested copies of an asset from specified Avamar inventory sources in the PowerProtect Data Manager.
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+          description: The request is not valid.
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+          description: The requestor is not allowed to perform this operation.
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+          description: The requestor is not authorized to perform this operation.
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+          description: An object with the specified ID is not found.
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+          description: An unexpected error prevented the server from fulfilling your request.
+      security:
+      - BearerAuth: []
+      summary: Fetch all copies of an asset from an Avamar source
+      tags:
+      - Avamar Asset Management
+      x-ppdm-executable-roles: admin,readonly,restore_admin,backup_admin
+    parameters:
+    - description: The Avamar inventory source ID.
+      in: path
+      name: id
+      required: true
+      schema:
+        type: string
+    - description: The asset ID.
+      in: path
+      name: assetId
+      required: true
+      schema:
+        type: string
+  /api/v3/avamars/{id}/assets/{assetId}/details:
+    get:
+      description: 'Retrieve detailed information of a specific asset from a specific Avamar inventory source. Passing query parameters that are not documented on this page will result in a 400 error when strict REST API validation is enabled. Additional information can be found in the Getting started - Strict REST API validation documentation.
+
+        > This endpoint supports execution by the following roles: Administrator, User, Restore Administrator, Backup Administrator
+
+        '
+      operationId: getAvamarAssetDetails
+      parameters:
+      - description: The Avamar inventory source ID.
+        in: path
+        name: id
+        required: true
+        schema:
+          type: string
+      - description: The asset ID.
+        in: path
+        name: assetId
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AvamarAssetDetails'
+          description: Successfully returned requested Assets from all Avamar inventory sources.
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+          description: The request is not valid.
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+          description: The requestor is not allowed to perform this operation.
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+          description: The requestor is not authorized to perform this operation.
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+          description: An object with the specified ID is not found.
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+          description: An unexpected error prevented the server from fulfilling your request.
+      security:
+      - BearerAuth: []
+      summary: Fetch detailed information of an asset from an Avamar inventory source.
+      tags:
+      - Avamar Asset Management
+      x-ppdm-executable-roles: admin,readonly,restore_admin,backup_admin
+    parameters:
+    - description: The Avamar inventory source ID.
+      in: path
+      name: id
+      required: true
+      schema:
+        type: string
+    - description: The asset ID.
+      in: path
+      name: assetId
+      required: true
+      schema:
+        type: string
+  /api/v3/copies-search:
+    post:
+      description: 'Search copies with specified filter and parameters. Passing query parameters that are not documented on this page will result in a 400 error when strict REST API validation is enabled. Additional information can be found in the Getting started - Strict REST API validation documentation.
+
+        > This endpoint supports execution by the following roles: Administrator
+
+        '
+      operationId: searchCopies
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CopiesSearchRequest'
+        description: The request body to search copies.
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedCopyList'
+          description: Successfully searched all available copies.
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+          description: The request is not valid.
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+          description: The requestor is not allowed to perform this operation.
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+          description: The requestor is not authorized to perform this operation.
+        '409':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+          description: The request could not be completed due to a conflict.
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+          description: An unexpected error prevented the server from fulfilling your request.
+      security:
+      - BearerAuth: []
+      summary: Search all the copies
+      tags:
+      - Copy Management V3
+      x-ppdm-executable-roles: admin
+  /api/v3/copies/{id}:
+    get:
+      description: 'Retrieve the details of the copy associated with a specified ID. Passing query parameters that are not documented on this page will result in a 400 error when strict REST API validation is enabled. Additional information can be found in the Getting started - Strict REST API validation documentation.
+
+        > This endpoint supports execution by the following roles: Administrator
+
+        '
+      operationId: getCopyById
+      parameters: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Copy'
+          description: Successfully retrieved the specified copy.
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+          description: The request is not valid.
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+          description: The requestor is not allowed to perform this operation.
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+          description: The requestor is not authorized to perform this operation.
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+          description: An unexpected error prevented the server from fulfilling your request.
+      security:
+      - BearerAuth: []
+      summary: Retrieve a copy by ID
+      tags:
+      - Copy Management V3
+      x-ppdm-executable-roles: admin
+    parameters:
+    - in: path
+      name: id
+      required: true
+      schema:
+        type: string
+  /api/v3/protection-configurations:
+    parameters: []
+    post:
+      description: "Initiate protection policy configuration.\n Passing query parameters that are not documented on this page will result in a 400 error when strict REST API validation is enabled. Additional information can be found in the Getting started - Strict REST API validation documentation.\n> This endpoint supports execution by the following roles: Administrator\n"
+      operationId: initiateProtectPolicyConfigurations
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProtectionConfigurationRequest'
+        required: false
+      responses:
+        '202':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProtectionConfigurationResponse'
+          description: The request has been accepted for processing.
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+          description: The request is not valid.
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+          description: The requestor is not allowed to perform this operation.
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+          description: The requestor is not authorized to perform this operation.
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+          description: Resources not found.
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+          description: An unexpected error prevented the server from fulfilling your request.
+      security:
+      - BearerAuth: []
+      summary: Initiate protection policy configuration
+      tags:
+      - Protection Policy v3
+      x-ppdm-executable-roles: admin
+  /api/v3/protection-policies:
+    get:
+      description: 'Get a list of all V3 protection policies.
+
+        To call this API, you must log in and have the "admin" role.
+
+        To get pagination results, specify query parameters as page and pageSize. Passing query parameters that are not documented on this page will result in a 400 error when strict REST API validation is enabled. Additional information can be found in the Getting started - Strict REST API validation documentation.
+
+        > This endpoint supports execution by the following roles: Administrator, User, Backup Administrator
+
+        '
+      operationId: getProtectionPolicies
+      parameters:
+      - $ref: '#/components/parameters/page'
+      - $ref: '#/components/parameters/pageSize'
+      - $ref: '#/components/parameters/filter'
+      - $ref: '#/components/parameters/orderby'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProtectionPolicies'
+          description: Successfully returned the protection policies.
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+          description: The request is not valid.
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+          description: The requestor is not allowed to perform this operation.
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+          description: The requestor is not authorized to perform this operation.
+        '416':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+          description: The request is too large to be retrieved.
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+          description: An unexpected error prevented the server from fulfilling your request.
+      security:
+      - BearerAuth: []
+      summary: Get a list of all protection policies
+      tags:
+      - Protection Policy v3
+      x-ppdm-executable-roles: admin,readonly,backup_admin
+    parameters: []
+    post:
+      description: 'Creates a new protection policy. Passing query parameters that are not documented on this page will result in a 400 error when strict REST API validation is enabled. Additional information can be found in the Getting started - Strict REST API validation documentation.
+
+        > This endpoint supports execution by the following roles: Administrator
+
+        '
+      operationId: createProtectionPolicy
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProtectionPolicy'
+        description: Request body.
+        required: true
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProtectionPolicy'
+          description: Successfully created the protection policy.
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+          description: The request is not valid.
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+          description: The requestor is not allowed to perform this operation.
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+          description: The requestor is not authorized to perform this operation.
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+          description: An unexpected error prevented the server from fulfilling your request.
+      security:
+      - BearerAuth: []
+      summary: Creates a new protection policy
+      tags:
+      - Protection Policy v3
+      x-ppdm-executable-roles: admin
+  /api/v3/protection-policies-batch:
+    parameters: []
+    patch:
+      description: 'Batch update protection policies. Currently, only the field ''''disabled'''' can be patched. Passing query parameters that are not documented on this page will result in a 400 error when strict REST API validation is enabled. Additional information can be found in the Getting started - Strict REST API validation documentation.
+
+        > This endpoint supports execution by the following roles: Administrator
+
+        '
+      operationId: batchUpdateProtectionPolicies
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PoliciesBatchRequests'
+        description: Request body of patching protection policies.
+        required: true
+      responses:
+        '207':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PoliciesBatchResponses'
+          description: Multi-status, allow partial success.
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+          description: The request is not valid.
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+          description: The requestor is not authorized to perform this operation.
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+          description: The o is not allowed to perform this operation.
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+          description: An unexpected error prevented the server from fulfilling your request.
+      security:
+      - BearerAuth: []
+      summary: Batch update protection policies
+      tags:
+      - Protection Policy v3
+      x-ppdm-executable-roles: admin
+  /api/v3/protection-policies/{id}:
+    delete:
+      description: 'Deletes a protection policy by ID.
+
+        When successful, the protection policy is deleted. Passing query parameters that are not documented on this page will result in a 400 error when strict REST API validation is enabled. Additional information can be found in the Getting started - Strict REST API validation documentation.
+
+        > This endpoint supports execution by the following roles: Administrator
+
+        '
+      operationId: deleteProtectionPolicy
+      parameters:
+      - description: ID of the protection policy.
+        in: path
+        name: id
+        required: true
+        schema:
+          type: string
+      responses:
+        '204':
+          description: Successfully deleted the protection policy.
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+          description: The request is not valid.
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+          description: The requestor is not allowed to perform this operation.
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+          description: The requestor is not authorized to perform this operation.
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+          description: An unexpected error prevented the server from fulfilling your request.
+      security:
+      - BearerAuth: []
+      summary: Deletes a protection policy by ID
+      tags:
+      - Protection Policy v3
+      x-ppdm-executable-roles: admin
+    get:
+      description: 'Get a protection policy by ID.
+
+        When successful, the response body includes the details of the protection policy. Passing query parameters that are not documented on this page will result in a 400 error when strict REST API validation is enabled. Additional information can be found in the Getting started - Strict REST API validation documentation.
+
+        > This endpoint supports execution by the following roles: Administrator, User, Backup Administrator
+
+        '
+      operationId: getProtectionPolicyById
+      parameters:
+      - description: ID of the protection policy.
+        in: path
+        name: id
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProtectionPolicy'
+          description: Successfully returned the protection policy.
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+          description: The request is not valid.
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+          description: The requestor is not allowed to perform this operation.
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+          description: The requestor is not authorized to perform this operation.
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+          description: The requested protection policy does not exist.
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+          description: An unexpected error prevented the server from fulfilling your request.
+      security:
+      - BearerAuth: []
+      summary: Get a protection policy by ID
+      tags:
+      - Protection Policy v3
+      x-ppdm-executable-roles: admin,readonly,backup_admin
+    parameters: []
+    patch:
+      description: 'Partially update the protection policy by ID. Passing query parameters that are not documented on this page will result in a 400 error when strict REST API validation is enabled. Additional information can be found in the Getting started - Strict REST API validation documentation.
+
+        > This endpoint supports execution by the following roles: Administrator
+
+        '
+      operationId: partialUpdateProtectionPolicy
+      parameters:
+      - description: ID of the protection policy.
+        in: path
+        name: id
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProtectionPolicy'
+        description: Request body
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProtectionPolicy'
+          description: Successfully updated the protection policy.
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+          description: The request is not valid.
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+          description: The requestor is not allowed to perform this operation.
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+          description: The requestor is not authorized to perform this operation.
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+          description: An unexpected error prevented the server from fulfilling your request.
+      security:
+      - BearerAuth: []
+      summary: Partially updates a protection policy by ID
+      tags:
+      - Protection Policy v3
+      x-ppdm-executable-roles: admin
+  /api/v3/protection-policy-settings:
+    get:
+      description: 'Retrieve the protection policy settings, which constitute global configurations impacting all policies within the system. Currently, this includes support for setting the maximum number of policies allowed in the system and disabling specific policy functions. Passing query parameters that are not documented on this page will result in a 400 error when strict REST API validation is enabled. Additional information can be found in the Getting started - Strict REST API validation documentation.
+
+        > This endpoint supports execution by the following roles: Administrator, User, Backup Administrator
+
+        '
+      operationId: getPolicySetting
+      parameters:
+      - in: query
+        name: view
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProtectionPolicySetting'
+          description: Successfully returned the protection policy settings.
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+          description: The requestor is not allowed to perform this operation.
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+          description: The requestor is not authorized to perform this operation.
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+          description: Not Found
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+          description: Internal Server Error
+      security:
+      - BearerAuth: []
+      summary: Get the protection policy settings
+      tags:
+      - Policy Setting
+      x-ppdm-executable-roles: admin,readonly,backup_admin
+    parameters: []
+    patch:
+      description: 'Update the protection policy settings. Passing query parameters that are not documented on this page will result in a 400 error when strict REST API validation is enabled. Additional information can be found in the Getting started - Strict REST API validation documentation.
+
+        > This endpoint supports execution by the following roles: Administrator
+
+        '
+      operationId: updatePolicySetting
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProtectionPolicySetting'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProtectionPolicySetting'
+          description: Successfully updated the protection policy setting.
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+          description: Invalid request to update policy setting.
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+          description: The requestor is not allowed to perform this operation.
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+          description: The requestor is not authorized to perform this operation.
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+          description: Internal Server Error
+      security:
+      - BearerAuth: []
+      summary: Partially update the protection policy setting
+      tags:
+      - Policy Setting
+      x-ppdm-executable-roles: admin
+  /api/v3/protection-policy-summaries:
+    get:
+      description: 'API to get a list of all V3 protection policy summaries.
+
+        To get pagination results, specify query parameters as page and pageSize. Passing query parameters that are not documented on this page will result in a 400 error when strict REST API validation is enabled. Additional information can be found in the Getting started - Strict REST API validation documentation.
+
+        > This endpoint supports execution by the following roles: Administrator, User, Backup Administrator
+
+        '
+      operationId: getProtectionPolicySummaries
+      parameters:
+      - $ref: '#/components/parameters/page'
+      - $ref: '#/components/parameters/pageSize'
+      - $ref: '#/components/parameters/filter'
+      - $ref: '#/components/parameters/orderby'
+      - allowEmptyValue: true
+        description: The policyFilter supports filter based on the policy fields, which are invisible from policy summary. For example, /api/v3/protection-policy-summaries?filter=numberOfAssets eq 2&policyFilter=objectives.config.backupMechanism eq "OIM"
+        in: query
+        name: policyFilter
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProtectionPolicySummaries'
+          description: Successfully returned the protection policy summaries.
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+          description: The request is not valid.
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+          description: The requestor is not allowed to perform this operation.
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+          description: The requestor is not authorized to perform this operation.
+        '416':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+          description: The request is too large to be retrieved.
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+          description: An unexpected error prevented the server from fulfilling your request.
+      security:
+      - BearerAuth: []
+      summary: Get protection policy summaries
+      tags:
+      - Protection Policy v3
+      x-ppdm-executable-roles: admin,readonly,backup_admin
+    parameters: []
+  /api/v3/protections:
+    post:
+      description: This request triggers an on-demand backup/replication/snapshot. Passing query parameters that are not documented on this page will result in a 400 error when strict REST API validation is enabled. Additional information can be found in the Getting started - Strict REST API validation documentation.
+      operationId: triggerProtectNow
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProtectionNowRequest'
+        description: Request body
+        required: true
+      responses:
+        '202':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProtectionNowResponse'
+          description: Successfully triggered on-demand backup/replication/snapshot.
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+          description: The request is not valid.
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+          description: The requestor is not allowed to perform this operation.
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+          description: The requestor is not authorized to perform this operation.
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+          description: An unexpected error prevented the server from fulfilling your request
+      security:
+      - BearerAuth: []
+      summary: On-demand protection
+      tags:
+      - Protection Policy v3
+servers:
+- url: https://localhost:8443
+tags:
+- name: Avamar Asset Management
+- name: Avamar Inventory Source Management
+- name: Copy Management V3
+- name: Policy Setting
+- name: Protection Policy v3
+x-version: 3.18.0

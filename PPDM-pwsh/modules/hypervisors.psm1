@@ -72,7 +72,11 @@ function Get-PPDMhypervisor_root_object {
 }
 
 
-
+<#
+$HyperV=Get-PPDMhypervisor_root_object -address labbuildr-asdk.azurestack.local -credentialId 92f9148c-f262-4957-a433-86ad8f856cd0
+$HyperV.hypervisorServer.extendedData
+Add-PPDMinfrastructure_objects -InfrastructureObject $HyperV.hypervisorServer -Verbose
+#>
 
 
 Function Add-PPDMinfrastructure_objects {

@@ -1,7 +1,31 @@
 
 
 <#
-https://ppdm-demo.home.labbuildr.com/passthrough/api/v3/hypervisor-root-object?address=labbuildr-asdk.azurestack.local&credentialId=92f9148c-f262-4957-a433-86ad8f856cd0&port=5986&protocol=HTTPS&type=hyperv
+.SYNOPSIS
+Add a Hypervisor root object, eg, Hyper-V Server ( standalone )
+.EXAMPLE
+
+$ENABLED_ASSETS=Get-PPDMcommon_settings -id ASSET_SETTING
+Add the  Hyper V Asset Source 'HYPERV_VIRTUAL_MACHINE' to the list of enabled Values
+$ENABLED_ASSETS.properties[0].value='VMWARE_VIRTUAL_MACHINE,GENERIC_APPLICATION_ASSET,KUBERNETES,HYPERV_VIRTUAL_MACHINE'
+Set-PPDMcommon_settings -id ASSET_SETTING -Properties $ENABLED_ASSETS
+
+id            properties
+--            ----------
+ASSET_SETTING {@{name=enabledAssetTypes; value=VMWARE_VIRTUAL_MACHINE,GENERIC_APPLICATION_ASSET,KUBERNETES,HYPERV_VIRTUAL_MACHINE; type=LIST}}
+
+Wait for ghvdm component to be enabled
+
+Get-PPDMcomponents -id 83e44374-33d7-4bd2-8790-39d6073b30b6
+
+id                   : 83e44374-33d7-4bd2-8790-39d6073b30b6
+componentDisplayName : Generic Hypervisor Data Manager
+componentServiceName : ghvdm
+componentType        : Business Service
+status               : INITIALIZING
+monitored            : True
+logging              : @{configurable=True; logLocation=/var/log/brs/ghvdm}
+
 
 #>
 

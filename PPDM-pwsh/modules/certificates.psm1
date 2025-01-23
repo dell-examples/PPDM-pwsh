@@ -72,7 +72,7 @@ function Get-PPDMcertificates {
                 $URI = "/$myself/$ID"
             }
             'byHost' {
-                $URI = "/$($myself)?host=$newhost&port=$port&type=Host"
+                $URI = "/$($myself)?host=$newhost&port=$port&type=Host&strict=true"
             }
             'TYPE' {
                 $URI = "/$($myself)/$type"
@@ -192,7 +192,17 @@ function Approve-PPDMcertificates {
             default {
                 $URI = "/$myself/$($Certificate.id)"
                 $Certificate.state = "ACCEPTED"
+                $Certificate.notValidBefore = get-date $Certificate.notValidBefore -Format yyyy-MM-ddTHH:mm:ss.fffZ
+                $Certificate.notValidAfter = get-date $Certificate.notValidAfter -Format yyyy-MM-ddTHH:mm:ss.fffZ
+                # $Certificate.verify =$false
+                $Certificate = $certificate | Select-Object -ExcludeProperty verify
                 $body = $Certificate | ConvertTo-Json
+           # $body = @{}
+           # $body.Add('state',"ACCEPTED")
+           # $body.add('host',$($Certificate.host))
+           # $body.add('port',$($Certificate.port))
+           # $body.add('id',$($Certificate.id))
+           # $body = $body | ConvertTo-Json
                 Write-Verbose ($body | Out-String)
             }
         }  

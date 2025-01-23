@@ -377,9 +377,6 @@ function Get-PPDMprotection_rules {
         $filter,
 
         [ValidateSet(
-            'CLOUD_NATIVE_ENTITY',
-            'CLOUD_DIRECTOR_VAPP',
-            'POWERSTORE_BLOCK',
             'VMAX_STORAGE_GROUP',
             'VMWARE_VIRTUAL_MACHINE',
             'ORACLE_DATABASE',
@@ -389,11 +386,14 @@ function Get-PPDMprotection_rules {
             'MICROSOFT_EXCHANGE_DATABASE',
             'SAP_HANA_DATABASE',
             'NAS_SHARE',
-            'DR'
+            'CLOUD_NATIVE_ENTITY',
+            'POWERSTORE_BLOCK',
+            'CLOUD_DIRECTOR_VAPP',
+            'DR',
+            'POWER_MAX_BLOCK',
+            'HYPERV_VIRTUAL_MACHINE'
         )]
         [Alias('AssetType')][string]$type,
-
-
         [Parameter(Mandatory = $false, ValueFromPipelineByPropertyName = $true)]
         $pageSize, 
         [Parameter(Mandatory = $false, ValueFromPipelineByPropertyName = $true)]

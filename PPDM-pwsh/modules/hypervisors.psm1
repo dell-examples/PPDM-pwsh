@@ -81,6 +81,7 @@ Add-PPDMinfrastructure_objects -InfrastructureObject $HyperV.hypervisorServer -V
 
 Function Add-PPDMinfrastructure_objects {
     [CmdletBinding()]
+    [Alias('Add-PPDMHyperVisor')]
     param(
         [Parameter(Mandatory = $true, ParameterSetName = 'byID', ValueFromPipelineByPropertyName = $true)]
         [psobject]$InfrastructureObject, 

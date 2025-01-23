@@ -7,27 +7,31 @@ function Get-PPDMinventory_sources {
         $id,
         [Parameter(Mandatory = $false, ValueFromPipelineByPropertyName = $true)]
         [ValidateSet(
+            'APP_HOST',
             'CLOUD_DIRECTOR',
             'CLOUD_SNAPSHOT_MANAGER',
             'CDR',
             'DATA_MANAGER_APPLIANCE',
-            'DATA_MANAGER_VAULT',
+            'DATA_MANAGER_APPLIANCE_CLUSTER',
             'DATADOMAINMANAGEMENTCENTER',
             'DDSYSTEM',
             'DEFAULTAPPGROUP',
             'EXTERNALDATADOMAIN',
             'GENERICNASMANAGEMENTSERVER',
+            'HYPERV_CLUSTER',
+            'HYPERV_SERVER',
             'KUBERNETES',
+            'NETAPP_MANAGEMENT_SERVER',
             'ORACLEGROUP',
             'POWERSCALEMANAGEMENTSERVER',
             'POWERSTOREMANAGEMENTSERVER',
             'PPDM',
-            'SMISPROVIDER',
             'SQLGROUPS',
             'UNITYMANAGEMENTSERVER',
-            'VCENTER'     
+            'UNISPHERE',
+            'VCENTER'
         )]
-        $Type,
+        [Alias('inventoryType')]$Type,
         [Parameter(Mandatory = $false, ValueFromPipelineByPropertyName = $true)]
         $filter, 
         [Parameter(Mandatory = $false, ValueFromPipelineByPropertyName = $true)]
@@ -118,12 +122,14 @@ function Get-PPDMinfrastructure_nodes {
         [Parameter(Mandatory = $TRUE, ParameterSetName = 'byID', ValueFromPipelineByPropertyName = $true)]
         [Parameter(Mandatory = $TRUE, ParameterSetName = 'ALL', ValueFromPipelineByPropertyName = $true)]
         [Parameter(Mandatory = $TRUE, ParameterSetName = 'Children', ValueFromPipelineByPropertyName = $true)]
-
-        [ValidateSet('MICROSOFT_SQL_DATABASE_VIEW',
-            'FILE_SYSTEM_VIEW',
+        [ValidateSet(
+            'MICROSOFT_SQL_DATABASE_VIEW',
+            'FILE_SYSTEM_VIEW', 
             'VMWARE_VIRTUAL_MACHINE_HOST_VIEW',
             'VMWARE_VIRTUAL_MACHINE_FOLDER_VIEW',
-            'ORACLE_DATA_GUARD_VIEW'      
+            'ORACLE_DATA_GUARD_VIEW',
+            'POWERSTORE_PROTECTION_GROUP_VIEW',
+            'POWER_MAX_STORAGE_SYSTEM_VIEW'     
         )]
         $Type,
         [Parameter(Mandatory = $TRUE, ParameterSetName = 'Children', ValueFromPipelineByPropertyName = $true)]
@@ -359,9 +365,9 @@ function Add-PPDMinventory_sources {
         [switch]$isAssetSource,  
         [Parameter(Mandatory = $false, ParameterSetName = 'Host', ValueFromPipelineByPropertyName = $true)]
         [switch]$vSphereUiIntegration,                       
-       # [Parameter(Mandatory = $false, ParameterSetName = 'Host', ValueFromPipelineByPropertyName = $true)]
-       # [Parameter(Mandatory = $false, ParameterSetName = 'GENERIC_NAS', ValueFromPipelineByPropertyName = $true)]
-       # [switch]$ssl,
+        # [Parameter(Mandatory = $false, ParameterSetName = 'Host', ValueFromPipelineByPropertyName = $true)]
+        # [Parameter(Mandatory = $false, ParameterSetName = 'GENERIC_NAS', ValueFromPipelineByPropertyName = $true)]
+        # [switch]$ssl,
         $PPDM_API_BaseUri = $Global:PPDM_API_BaseUri,
         $apiver = "/api/v2"
 
@@ -407,7 +413,7 @@ function Add-PPDMinventory_sources {
                     }    
                     $body.details.k8s.Add('distributionType', $K8S_TYPE )
                 }                
-#                $body.Add('ssl', $ssl.isPresent )                
+                #                $body.Add('ssl', $ssl.isPresent )                
                 $body = $body | ConvertTo-Json
             }
             'GENERIC_NAS' {

@@ -14,11 +14,15 @@ function Get-PPDMcredentials {
         [Parameter(Mandatory = $false, ParameterSetName = 'all', ValueFromPipelineByPropertyName = $true)]
         $filter,
         [ValidateSet(
+            'DBUSER',
             'DATADOMAIN',
             'POWERPROTECT',
+            'SMISSERVER',
             'DBUSER',
             'OS',
             'RMAN',
+            'WALLET',
+            'WINDOWS',
             'STANDARD',
             'VCENTER',
             'KUBERNETES',
@@ -29,9 +33,11 @@ function Get-PPDMcredentials {
             'DDBOOST',
             'NAS',
             'CLOUD_SNAPSHOT_MANAGER',
-            'CLOUD_DIRECTOR'
+            'CLOUD_DIRECTOR',
+            'AVAMAR',
+            'HYPERV'
         )]
-        [Alias('AssetType')][string]$type,
+        [Alias('AssetType','credentialType')][string]$type,
         [Parameter(Mandatory = $false, ParameterSetName = 'all', ValueFromPipelineByPropertyName = $true)]
         $pageSize, 
         [Parameter(Mandatory = $false, ParameterSetName = 'all', ValueFromPipelineByPropertyName = $true)]
@@ -170,11 +176,15 @@ function New-PPDMcredentials {
         [string]$name,
         [Parameter(Mandatory = $true, ValueFromPipelineByPropertyName = $true)]
         [ValidateSet(
+            'DBUSER',
             'DATADOMAIN',
             'POWERPROTECT',
+            'SMISSERVER',
             'DBUSER',
             'OS',
             'RMAN',
+            'WALLET',
+            'WINDOWS',
             'STANDARD',
             'VCENTER',
             'KUBERNETES',
@@ -185,9 +195,11 @@ function New-PPDMcredentials {
             'DDBOOST',
             'NAS',
             'CLOUD_SNAPSHOT_MANAGER',
-            'CLOUD_DIRECTOR'
+            'CLOUD_DIRECTOR',
+            'AVAMAR',
+            'HYPERV'
         )]
-        [string]$type,
+        [Alias('AssetType','credentialType')][string]$type,
         [Parameter(Mandatory = $false, ValueFromPipelineByPropertyName = $true)]
         [pscredential]$credentials,
         [Parameter(Mandatory = $false, ValueFromPipelineByPropertyName = $true)]

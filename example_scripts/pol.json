@@ -1,0 +1,90 @@
+{
+    "id": "81b38cf7-d7ba-4734-86c3-5ed6ca0fb218",
+    "name": "Anomaly_Test",
+    "description": "",
+    "assetType": "VMWARE_VIRTUAL_MACHINE",
+    "type": "ACTIVE",
+    "category": "CENTRALIZED_PROTECTION",
+    "targetStorageProvisionStrategy": "AUTO_PROVISION",
+    "enabled": true,
+    "passive": false,
+    "forceFull": false,
+    "priority": 1,
+    "credentials": null,
+    "encrypted": false,
+    "dataConsistency": "CRASH_CONSISTENT",
+    "complianceInterval": null,
+    "details": {
+      "vm": {
+        "protectionEngine": "VMDIRECT",
+        "metadataIndexingEnabled": true
+      }
+    },
+    "summary": {
+      "numberOfAssets": 1,
+      "totalAssetCapacity": 51539607552.0,
+      "totalAssetProtectionCapacity": 51539607552.0,
+      "numberOfJobFailures": 0,
+      "numberOfSlaFailures": 0,
+      "numberOfSlaSuccess": 0,
+      "lastExecutionStatus": "SUCCEEDED"
+    },
+    "stages": [
+      {
+        "id": "9082f9f6-d0c9-5298-f456-deb9ca1a5663",
+        "type": "PROTECTION",
+        "passive": false,
+        "retention": {
+          "id": "a0ad2e5c-2975-0870-e98a-772ee8ead6fb",
+          "interval": 3,
+          "unit": "DAY",
+          "storageSystemRetentionLock": false
+        },
+        "extendedRetentions": [
+          {
+            "retention": {
+              "id": "b38c63a5-9a20-9c78-f875-27cbb5790cfb",
+              "interval": 3,
+              "unit": "DAY",
+              "storageSystemRetentionLock": false
+            },
+            "selector": {
+              "operationId": "a3b3a564-1604-c7e6-5675-4b0491070e94"
+            }
+          }
+        ],
+        "target": {
+          "storageSystemId": "f6bceb20-b9f1-49f0-bb6b-3d4c1faa4d70",
+          "dataTargetId": "e8aca19e-68d9-409e-ae48-91e0ff81c50e",
+          "preferredInterfaceId": "ethV1"
+        },
+        "attributes": {
+          "vm": {
+            "appConsistentProtection": false,
+            "disableQuiescing": true,
+            "excludeSwapFiles": false,
+            "dataMoverType": "SDM"
+          },
+          "protection": {
+            "backupMode": "FSS"
+          }
+        },
+        "operations": [
+          {
+            "id": "a3b3a564-1604-c7e6-5675-4b0491070e94",
+            "type": "SYNTHETIC_FULL",
+            "schedule": {
+              "frequency": "DAILY",
+              "startTime": "2024-04-24T18:00:00Z",
+              "duration": "PT10H"
+            },
+            "backupType": "SYNTHETIC_FULL"
+          }
+        ],
+        "options": {
+          "indexingEnabled": true,
+          "anomalyDetectionEnabled": true
+        }
+      }
+    ]
+  }

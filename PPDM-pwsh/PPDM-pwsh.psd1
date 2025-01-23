@@ -369,7 +369,8 @@ AliasesToExport = @(
     'New-PPDMBackupSLA',
     'Set-PPDMOIMProtocol',
     'Get-PPDMOIMspfile',
-    'Restore-PPDMNASFLR'
+    'Restore-PPDMNASFLR',
+    'Add-PPDMHyperVisor'
 )
 
 # DSC resources to export from this module

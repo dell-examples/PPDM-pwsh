@@ -211,3 +211,177 @@ Function Add-PPDMinfrastructure_objects {
         }   
     }
 }
+
+
+function Get-PPDMinfrastructure_objects {
+    [CmdletBinding()]
+    param(
+
+        [Parameter(Mandatory = $true, ParameterSetName = 'byID', ValueFromPipelineByPropertyName = $true)]
+        $id,
+        [Parameter(Mandatory = $false, ParameterSetName = 'all', ValueFromPipelineByPropertyName = $true)]
+        $filter,
+        [Parameter(Mandatory = $false, ParameterSetName = 'all', ValueFromPipelineByPropertyName = $true)]
+        [ValidateSet(
+        'HYPERV_SERVER',
+        'GENERIC_APPLICATION_SYSTEM',
+        'GENERIC_APPLICATION_HOST',
+        'KUBERNETES_CLUSTER',
+        'VMWARE_ESX_HOST',
+        'VMWARE_ESX_CLUSTER',
+        'VMWARE_VCENTER',
+        'EXTERNAL_DATA_DOMAIN_INTERFACE',
+        'DEFAULT_APP_GROUP'
+        )]
+        $Type,        
+        [Parameter(Mandatory = $false, ParameterSetName = 'all', ValueFromPipelineByPropertyName = $true)]
+        $pageSize, 
+        [Parameter(Mandatory = $false, ParameterSetName = 'all', ValueFromPipelineByPropertyName = $true)]
+        $page, 
+        [Parameter(Mandatory = $false, ParameterSetName = 'all', ValueFromPipelineByPropertyName = $true)]
+        [hashtable]$body = @{orderby = 'createdAt DESC' },
+        [Parameter(Mandatory = $false, ValueFromPipelineByPropertyName = $true)]                
+        $PPDM_API_BaseUri = $Global:PPDM_API_BaseUri,
+        [Parameter(Mandatory = $false, ValueFromPipelineByPropertyName = $true)]
+        $apiver = "/api/v3"
+    )
+
+    begin {
+        $Response = @()
+        $METHOD = "GET"
+        $Myself = ($MyInvocation.MyCommand.Name.Substring(8) -replace "_", "-").ToLower()
+   
+    }     
+    Process {
+        switch ($PsCmdlet.ParameterSetName) {
+            'byID' {
+                $URI = "/$myself/$id"
+                $body = @{}  
+
+            }
+            default {
+                $URI = "/$myself"
+            }
+        }  
+        if ($pagesize) {
+            $body.add('pageSize', $pagesize)
+        }
+        if ($page) {
+            $body.add('page', $page)
+        }   
+        $Parameters = @{
+            RequestMethod    = 'REST'
+            body             = $body
+            Uri              = $URI
+            Method           = $Method
+            PPDM_API_BaseUri = $PPDM_API_BaseUri
+            apiver           = $apiver
+            Verbose          = $PSBoundParameters['Verbose'] -eq $true
+        }
+        if ($type) {
+            if ($filter) {
+                $filter = 'type eq "' + $type + '" and ' + $filter 
+            }
+            else {
+                $filter = 'type eq "' + $type + '"'
+            }
+        }        
+        if ($filter) {
+            $parameters.Add('filter', $filter)
+        } 
+        Write-Verbose ($Parameters | Out-String )     
+        try {
+            $Response += Invoke-PPDMapirequest @Parameters
+        }
+        catch {
+            Get-PPDMWebException  -ExceptionMessage $_
+            break
+        }
+        write-verbose ($response | Out-String)
+    } 
+    end {    
+        switch ($PsCmdlet.ParameterSetName) {
+            'byID' {
+                write-output $response 
+            }
+            default {
+                write-output $response.content
+                if ($response.page) {
+                    write-host ($response.page | out-string)
+                }
+            } 
+        }   
+    }
+}
+
+function Set-PPDMghvdm_host_configuration_batch {
+    [CmdletBinding()]
+    param(
+
+        [Parameter(Mandatory = $true, ParameterSetName = 'all', ValueFromPipelineByPropertyName = $true)]
+        [string[]]$hostId,
+        [Parameter(Mandatory = $false, ParameterSetName = 'all', ValueFromPipelineByPropertyName = $true)]
+        [ValidateSet(
+            'UNINSTALL_AGENT',
+            'INSTALL_AGENT',
+            'UPGRADE_AGENT'
+        )]
+        $configurationType,        
+        [Parameter(Mandatory = $false, ValueFromPipelineByPropertyName = $true)]                
+        $PPDM_API_BaseUri = $Global:PPDM_API_BaseUri,
+        [Parameter(Mandatory = $false, ValueFromPipelineByPropertyName = $true)]
+        $apiver = "/api/v3"
+    )
+
+    begin {
+        $Response = @()
+        $METHOD = "POST"
+        $Myself = ($MyInvocation.MyCommand.Name.Substring(8) -replace "_", "-").ToLower()
+    }     
+    Process {
+        switch ($PsCmdlet.ParameterSetName) {
+            default {
+                $URI = "/$myself"
+            }
+        }
+        $body = @{}  
+        $body.Add('commonBody', @{})
+        $body.commonBody.Add('configurationType',$configurationType)
+        $body.Add('requests', @())
+        $I=1
+        foreach ($id in $hostID) {
+            $request= @{
+                "id" = "$i"
+                "body" = @{'hostId' = $ID}     
+              }
+            $body.requests += $request  
+            $I++
+        }
+        $body = $body | ConvertTo-Json -Depth 5
+        $Parameters = @{
+            RequestMethod    = 'REST'
+            body             = $body
+            Uri              = $URI
+            Method           = $Method
+            PPDM_API_BaseUri = $PPDM_API_BaseUri
+            apiver           = $apiver
+            Verbose          = $PSBoundParameters['Verbose'] -eq $true
+        }
+        try {
+            $Response += Invoke-PPDMapirequest @Parameters
+        }
+        catch {
+            Get-PPDMWebException  -ExceptionMessage $_
+            break
+        }
+        write-verbose ($response | Out-String)
+    } 
+    end {    
+        switch ($PsCmdlet.ParameterSetName) {
+            default {
+                write-output $response
+            } 
+        }   
+    }
+}
+

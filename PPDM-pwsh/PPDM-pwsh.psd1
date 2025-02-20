@@ -12,7 +12,7 @@
 RootModule = 'PPDM-pwsh.psm1'
 
 # Version number of this module.
-ModuleVersion = '19.18.2'
+ModuleVersion = '19.18.6'
 
 # Supported PSEditions
 # CompatiblePSEditions = @()
@@ -101,7 +101,9 @@ NestedModules = @(
     './modules/reporting',
     './modules/account',
     './modules/search',
-    './modules/hypervisors'
+    './modules/hypervisors',
+    './modules/infrastructure-objects'
+    './modules/scripts'
 )
 
 # Functions to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no functions to export.
@@ -322,7 +324,16 @@ FunctionsToExport = @(
     'New-PPDMsearch_nodes',
     'Get-PPDMsearch_nodes',
     'Get-PPDMhypervisor_root_object',
-    'Add-PPDMinfrastructure_objects'
+    'Add-PPDMinfrastructure_objects',
+    'Get-PPDMinfrastructure_objects',
+    'Set-PPDMghvdm_host_configuration_batch',
+    'Get-PPDMinfrastructure_objects',
+    'Set-PPDMscripts',
+    'Get-PPDMscripts',
+    'Update-PPDMscripts',
+    'Remove-PPDMscripts',
+    'Get-PPDMscript_contexts',
+    'Get-PPDMscript_summaries'
     )
 
 # Cmdlets to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no cmdlets to export.

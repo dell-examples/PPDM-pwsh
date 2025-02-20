@@ -1,4 +1,4 @@
-function Get-PPDMxxxNoID {
+function Get-PPDMinfrastructure_objects {
     [CmdletBinding()]
     param(
 
@@ -8,7 +8,30 @@ function Get-PPDMxxxNoID {
         $filter,
         [Parameter(Mandatory = $false, ParameterSetName = 'all', ValueFromPipelineByPropertyName = $true)]
         [ValidateSet(
-    
+            'APPLICATION_HOST_INVENTORY_SOURCE',
+            'CLOUD_DIRECTOR',
+            'CLOUD_DISASTER_RECOVERY',
+            'CLOUD_SNAPSHOT_MANAGER',
+            'DATA_DOMAIN_INTERFACE',
+            'DATA_DOMAIN_MANAGEMENT_CENTER',
+            'DATA_MANAGER_APPLIANCE',
+            'DATA_MANAGER_APPLIANCE_CLUSTER',
+            'EXTERNAL_DATA_DOMAIN_INTERFACE',
+            'DEFAULT_APP_GROUP',
+            'GENERIC_NAS_MANAGEMENT_SERVER',
+            'KUBERNETES_CLUSTER',
+            'ORACLE_GROUP',
+            'POWER_PROTECT_DATA_MANAGER',
+            'POWER_SCALE_MANAGEMENT_SERVER',
+            'POWER_STORE_MANAGEMENT_SERVER',
+            'SMIS_SERVER',
+            'SQL_GROUP',
+            'UNISPHERE',
+            'UNITY_MANAGEMENT_SERVER',
+            'VMWARE_VCENTER',
+            'VMWARE_ESX_CLUSTER',
+            'HYPERV_SERVER',
+            'HYPERV_CLUSTER'
         )]
         $Type,        
         [Parameter(Mandatory = $false, ParameterSetName = 'all', ValueFromPipelineByPropertyName = $true)]
@@ -20,7 +43,7 @@ function Get-PPDMxxxNoID {
         [Parameter(Mandatory = $false, ValueFromPipelineByPropertyName = $true)]                
         $PPDM_API_BaseUri = $Global:PPDM_API_BaseUri,
         [Parameter(Mandatory = $false, ValueFromPipelineByPropertyName = $true)]
-        $apiver = "/api/v2"
+        $apiver = "/api/v3"
     )
 
     begin {
@@ -89,4 +112,3 @@ function Get-PPDMxxxNoID {
         }   
     }
 }
-

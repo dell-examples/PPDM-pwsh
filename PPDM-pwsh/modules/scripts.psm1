@@ -10,6 +10,14 @@
 #GET /api/v3/script-contexts/{id}
 #PATCH /api/v3/script-contexts/{id}
 #DELETE /api/v3/script-contexts/{id}
+<#
+.SYNOPSIS
+Sdet a backup Script
+.DESCRIPTION
+Used for Pre, Post and Backup Scripts
+.EXAMPLE
+set-ppdMscripts -scriptfile .\example_scripts\s3_backup_rclone.sh -scriptname "TRANSFER_4_THREAD_512k" -Verbose -Type BACKUP  -AssetSubType GENERIC_RCLONE -OSType LINUX
+#>
 function Set-PPDMscripts {
     [CmdletBinding()]
     param(
@@ -174,7 +182,9 @@ function Set-PPDMscripts {
 
 
 
-
+<#
+SYNOPSIS
+#>
 
 function Update-PPDMscripts {
     [CmdletBinding()]

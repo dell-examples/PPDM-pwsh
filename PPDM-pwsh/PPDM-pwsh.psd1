@@ -103,7 +103,8 @@ NestedModules = @(
     './modules/search',
     './modules/hypervisors',
     './modules/infrastructure-objects'
-    './modules/scripts'
+    './modules/scripts',
+    './modules/networks'
 )
 
 # Functions to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no functions to export.
@@ -336,7 +337,8 @@ FunctionsToExport = @(
     'Get-PPDMscript_summaries',
     'Set-PPDMasset_networks_batch',
     'Get-PPDMStorageInterfacesDD',
-    'Get-PPDMdatadomain_network_address'
+    'Get-PPDMdatadomain_network_address',
+    'Get-PPDMnetworks'
     )
 
 # Cmdlets to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no cmdlets to export.

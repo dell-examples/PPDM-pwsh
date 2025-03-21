@@ -12,7 +12,7 @@
 RootModule = 'PPDM-pwsh.psm1'
 
 # Version number of this module.
-ModuleVersion = '19.18.21'
+ModuleVersion = '19.18.22'
 
 # Supported PSEditions
 # CompatiblePSEditions = @()
@@ -482,7 +482,7 @@ PrivateData = @{
         - added diconnect (removes Global Variables )
         - added force connect (removes Global Variables )
         '
-    Prerelease = 'Pre'
+    # Prerelease = 'Pre'
     } # End of PSData hashtable
 
 } # End of PrivateData hashtable

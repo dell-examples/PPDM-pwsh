@@ -194,10 +194,8 @@ function Get-PPDMlatest_copies {
 function Get-PPDMcopies_query {
     [CmdletBinding()]
     param(
-        [Parameter(Mandatory = $true, ParameterSetName = 'AssetIDS', ValueFromPipelineByPropertyName = $true)]
         [Parameter(Mandatory = $false, ParameterSetName = 'Filter', ValueFromPipelineByPropertyName = $true)]
         [Alias('Id')][string[]]$assetID,
-        [Parameter(Mandatory = $true, ParameterSetName = 'TYPE', ValueFromPipelineByPropertyName = $true)]
         [Parameter(Mandatory = $false, ParameterSetName = 'Filter', ValueFromPipelineByPropertyName = $true)]
         [ValidateSet(          
             'VMAXSTORAGEGROUP',
@@ -211,9 +209,10 @@ function Get-PPDMcopies_query {
             'UNITY_NFS', 'UNITY_CIFS', 'POWERSTORE_NFS', 'POWERSTORE_CIFS', 'POWERSCALE_NFS', 'POWERSCALE_CIFS', 'NFS_GENERIC', 'CIFS_GENERIC',
             'CLOUD_NATIVE_ENTITY',
             'POWERSTORE_VOLUMEGROUP', 'POWERSTORE_VOLUME',
-            'CLOUD_DIRECTOR_VAPP'
-        )]$Type,
-        [Parameter(Mandatory = $true, ParameterSetName = 'Filter', ValueFromPipelineByPropertyName = $true)]
+            'CLOUD_DIRECTOR_VAPP',
+            'GENERIC_POSTGRES'
+        )]$SUBType,
+        [Parameter(Mandatory = $false, ParameterSetName = 'Filter', ValueFromPipelineByPropertyName = $true)]
         $filter,
         [Parameter(Mandatory = $false, ValueFromPipelineByPropertyName = $true)]
         $pageSize, 

@@ -18,13 +18,12 @@
 BASE_BACKUP_DIR=${DD_TARGET_DIRECTORY}
 
 # Process command line options
-while getopts ":b:c:p:s:" opt; do
+while getopts ":b:c:p:s:i:f:" opt; do
   case $opt in
     b)
       ## the bucket to backup
       BUCKET="$OPTARG"
       ;;
-
     c)
       # the cloud profile to be defined on the datamover
       CLOUD_PROFILE="$OPTARG"
@@ -37,7 +36,15 @@ while getopts ":b:c:p:s:" opt; do
     s)
       # backup tool stream count ( parallel copies")
       STREAMS="$OPTARG"
-      ;;  
+      ;;
+    i)
+     ## incremental Max Age in hrs
+      INCREMENTAL_MAX_AGE="$OPTARG"
+      ;;
+    f)
+     ## incremental Max Age in hrs
+      FULL_MAX_AGE="$OPTARG"
+      ;;
     # Invalid option
     \?)
       echo "Invalid option: -$OPTARG" >&2
@@ -62,7 +69,7 @@ fi
 if [[ "$BACKUP_LEVEL" == "FULL" ]]; then
             COPY_COMMAND=" rclone copy "
             ## do not change multi thread options  need to stay 1!
-            ${COPY_COMMAND} --transfers ${STREAMS} --multi-thread-write-buffer-size 512k --multi-thread-streams 1 --progress ${CLOUD_PROFILE}:${BUCKET}${PREFIX} ${BASE_BACKUP_DIR}/  2>&1 >> /tmp/rclone.log
+            ${COPY_COMMAND} --max-age ${FULL_MAX_AGE} --transfers ${STREAMS} --multi-thread-write-buffer-size 512k --multi-thread-streams 1 --progress ${CLOUD_PROFILE}:${BUCKET}${PREFIX} ${BASE_BACKUP_DIR}/  2>&1 >> /tmp/rclone.log
             exit_status=$?
     if [ $exit_status -ne 0 ]; then
        echo "Unable to perform FULL backup"
@@ -74,7 +81,7 @@ if [[ "$BACKUP_LEVEL" == "FULL" ]]; then
 # Perform a log backup
 elif [[ "$BACKUP_LEVEL" == "LOG" ]]; then
             COPY_COMMAND=" rclone copy "
-            ${COPY_COMMAND} --transfers ${STREAMS} --multi-thread-write-buffer-size 512k --multi-thread-streams 1 --progress ${CLOUD_PROFILE}:${BUCKET}${PREFIX} ${BASE_BACKUP_DIR}/  2>&1 >> /tmp/rclone.log
+            ${COPY_COMMAND} --max-age ${INCREMENTAL_MAX_AGE} --transfers ${STREAMS} --multi-thread-write-buffer-size 512k --multi-thread-streams 1 --progress ${CLOUD_PROFILE}:${BUCKET}${PREFIX} ${BASE_BACKUP_DIR}/  2>&1 >> /tmp/rclone.log
             exit_status=$?
     if [ $exit_status -ne 0 ]; then
        echo "Unable to perform FULL backup"

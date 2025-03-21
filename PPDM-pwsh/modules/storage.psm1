@@ -1559,4 +1559,66 @@ function Get-PPDMprotection_storage_metrics {
   }
 }
 
+function Get-PPDMdatadomain_network_address {
+  [Alias('Get-PPDMAssetNetworkAssignments')]
+  [CmdletBinding()]
+  param(
 
+    [Parameter(Mandatory = $true, ParameterSetName = 'byID', ValueFromPipelineByPropertyName = $true)]
+    [alias('aID')]$assetID,
+    [Parameter(Mandatory = $true, ParameterSetName = 'byID', ValueFromPipelineByPropertyName = $true)]
+    [alias('dtID')]$dataTargetId,      
+    [Parameter(Mandatory = $false, ValueFromPipelineByPropertyName = $true)]                
+    $PPDM_API_BaseUri = $Global:PPDM_API_BaseUri,
+    [Parameter(Mandatory = $false, ValueFromPipelineByPropertyName = $true)]
+    $apiver = "/api/v2"
+  )
+
+  begin {
+    $Response = @()
+    $METHOD = "GET"
+    $Myself = ($MyInvocation.MyCommand.Name.Substring(8) -replace "_", "-").ToLower()
+ 
+  }     
+  Process {
+    switch ($PsCmdlet.ParameterSetName) {
+      'byID' {
+        $URI = "/$($Myself)?dataTargetId=$($dataTargetId)&assetId=$($AssetID)"
+        $body = @{}  
+      }  
+    }
+    #$body.add('dataTargetId', $dataTargetId)
+    #$body.add('assetID', $assetID)
+    $Parameters = @{
+      RequestMethod    = 'REST'
+      # body             = $body
+      Uri              = $URI
+      Method           = $Method
+      PPDM_API_BaseUri = $PPDM_API_BaseUri
+      apiver           = $apiver
+      Verbose          = $PSBoundParameters['Verbose'] -eq $true
+    }
+    try {
+      $Response += Invoke-PPDMapirequest @Parameters
+    }
+    catch {
+      Get-PPDMWebException  -ExceptionMessage $_
+      break
+    }
+    write-verbose ($response | Out-String)
+  } 
+  end {    
+    switch ($PsCmdlet.ParameterSetName) {
+      'byID' {
+        write-output $response 
+      }
+    }   
+  }
+}
+
+
+
+
+## ALiases
+
+function  Get-PPDMStorageInterfacesDD { (Get-PPDMstorage_systems -Filter 'type eq "DATA_DOMAIN_SYSTEM"').details.dataDomain | Select-Object serialNumber -ExpandProperty preferredInterfaces }

@@ -47,7 +47,8 @@ function Get-PPDMassets {
             'CLOUD_DIRECTOR_VAPP',
             'DR',
             'POWER_MAX_BLOCK',
-            'HYPERV_VIRTUAL_MACHINE'
+            'HYPERV_VIRTUAL_MACHINE',
+            'GENERIC_APPLICATION_ASSET'
         )]
         [Alias('AssetType')][string]$type,
         [Parameter(Mandatory = $false, ValueFromPipelineByPropertyName = $true)]
@@ -1215,5 +1216,73 @@ function Set-PPDMOracleOIMProtectionProtocol {
         Write-Verbose ($Response | Out-String)
         Write-Host $Response.Headers.Date
 
+    }
+}
+
+
+function Set-PPDMasset_networks_batch {
+    [CmdletBinding()]
+    [Alias('Set-PPDMAssetNetwork')]
+    param(
+        [Parameter(Mandatory = $true, ValueFromPipelineByPropertyName = $true)]
+        $id,
+        [Parameter(Mandatory = $true, ValueFromPipelineByPropertyName = $true)]
+        $networkLabel,        
+        $PPDM_API_BaseUri = $Global:PPDM_API_BaseUri,
+        $apiver = "/api/v2"
+
+    )
+    begin {
+        $Response = @()
+        $result =@()
+        $METHOD = "PATCH"
+        $Myself = ($MyInvocation.MyCommand.Name.Substring(8) -replace "_", "-").ToLower()
+   
+    }     
+    Process {
+        switch ($PsCmdlet.ParameterSetName) {
+            default {
+                $URI = "/$myself"
+            }
+        }
+        $body = @{ requests = @(
+                @{
+
+                    id   = (New-Guid).Guid
+                    body = @{
+                        id           = $id
+                        networkLabel = $networkLabel
+                    }
+                }
+            )
+        }  | ConvertTo-json -Depth 7 
+        write-verbose ($body | out-string)
+        $Parameters = @{
+            RequestMethod    = 'REST'
+            body             = $body
+            Uri              = $URI
+            Method           = $Method
+            PPDM_API_BaseUri = $PPDM_API_BaseUri
+            apiver           = $apiver
+            Verbose          = $PSBoundParameters['Verbose'] -eq $true
+        }   
+            
+        try {
+            $Response += Invoke-PPDMapirequest @Parameters
+        }
+        catch {
+            Get-PPDMWebException  -ExceptionMessage $_
+            break
+        }
+        write-verbose ($response | Out-String)
+        $result += Get-PPDMassets -id $id| select-object name,id,networkLabel
+
+    } 
+    end {    
+        switch ($PsCmdlet.ParameterSetName) {
+            default {
+                write-output ($result)
+            } 
+        }   
     }
 }

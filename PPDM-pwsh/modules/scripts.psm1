@@ -127,7 +127,19 @@ function Set-PPDMscripts {
                     value       = "4"
                     displayName = "STREAMS"
                     alias       = "-s"                    
-                }                                 
+                }
+                @{
+                    type        = "STRING"
+                    value       = "off"
+                    displayName = "Incremental Max Age ms|s|m|h|d|w|M|y (default off)"
+                    alias       = "-i"                    
+                } 
+                @{
+                    type        = "STRING"
+                    value       = "off"
+                    displayName = "Full Max Age ms|s|m|h|d|w|M|y (default off)"
+                    alias       = "-f"                    
+                }                                                     
             )
             $body.extendedData.subTypes[0]="GENERIC_POSTGRES"    
         }        

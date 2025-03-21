@@ -12,7 +12,7 @@
 RootModule = 'PPDM-pwsh.psm1'
 
 # Version number of this module.
-ModuleVersion = '19.18.6'
+ModuleVersion = '19.18.21'
 
 # Supported PSEditions
 # CompatiblePSEditions = @()
@@ -333,7 +333,10 @@ FunctionsToExport = @(
     'Update-PPDMscripts',
     'Remove-PPDMscripts',
     'Get-PPDMscript_contexts',
-    'Get-PPDMscript_summaries'
+    'Get-PPDMscript_summaries',
+    'Set-PPDMasset_networks_batch',
+    'Get-PPDMStorageInterfacesDD',
+    'Get-PPDMdatadomain_network_address'
     )
 
 # Cmdlets to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no cmdlets to export.
@@ -381,7 +384,9 @@ AliasesToExport = @(
     'Set-PPDMOIMProtocol',
     'Get-PPDMOIMspfile',
     'Restore-PPDMNASFLR',
-    'Add-PPDMHyperVisor'
+    'Add-PPDMHyperVisor',
+    'Set-PPDMAssetNetwork',
+    'Get-PPDMAssetNetworkAssignments'
 )
 
 # DSC resources to export from this module

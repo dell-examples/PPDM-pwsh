@@ -1,8 +1,8 @@
 #!/bin/bash
 
 #
-# Copyright (c) 2024 Dell Inc. or its subsidiaries. All Rights Reserved.
-#
+# Copyright (c) 2025 Dell Inc. or its subsidiaries. All Rights Reserved.
+# Karsten.Bott@dell.com
 # This software contains the intellectual property of Dell Inc.
 # or is licensed to Dell Inc. from third parties. Use of this
 # software and the intellectual property contained therein is

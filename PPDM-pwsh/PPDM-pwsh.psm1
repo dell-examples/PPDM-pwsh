@@ -324,7 +324,11 @@ function Invoke-PPDMapirequest {
             $Headers = $Global:PPDM_API_Headers
             Write-Verbose ($Headers | Out-String)  
         }
-
+        else {
+            $Headers = @{
+                'Authorization' = "Bearer []"
+            }
+        }
         Write-Verbose "==> Calling $uri"
         $Parameters = @{
             UseBasicParsing = $true 

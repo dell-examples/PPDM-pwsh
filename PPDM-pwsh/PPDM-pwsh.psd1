@@ -12,7 +12,7 @@
 RootModule = 'PPDM-pwsh.psm1'
 
 # Version number of this module.
-ModuleVersion = '19.18.24'
+ModuleVersion = '19.22.0'
 
 # Supported PSEditions
 # CompatiblePSEditions = @()
@@ -104,7 +104,8 @@ NestedModules = @(
     './modules/hypervisors',
     './modules/infrastructure-objects'
     './modules/scripts',
-    './modules/networks'
+    './modules/networks',
+    './modules/anomalies'
 )
 
 # Functions to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no functions to export.
@@ -339,7 +340,8 @@ FunctionsToExport = @(
     'Get-PPDMStorageInterfacesDD',
     'Get-PPDMdatadomain_network_address',
     'Get-PPDMnetworks',
-    'Search-PPDMcopies'
+    'Search-PPDMcopies',
+    'Get-PPDManomaly_detection_rules'
     )
 
 # Cmdlets to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no cmdlets to export.
@@ -389,7 +391,8 @@ AliasesToExport = @(
     'Restore-PPDMNASFLR',
     'Add-PPDMHyperVisor',
     'Set-PPDMAssetNetwork',
-    'Get-PPDMAssetNetworkAssignments'
+    'Get-PPDMAssetNetworkAssignments',
+    'Get-PPDManonDrules'
 )
 
 # DSC resources to export from this module
@@ -483,7 +486,7 @@ PrivateData = @{
         - added diconnect (removes Global Variables )
         - added force connect (removes Global Variables )
         '
-    # Prerelease = 'Pre'
+    Prerelease = 'SNAPSHOT'
     } # End of PSData hashtable
 
 } # End of PrivateData hashtable

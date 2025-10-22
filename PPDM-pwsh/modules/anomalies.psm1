@@ -1,16 +1,15 @@
-function Get-PPDMxxxNoID {
+function Get-PPDManomaly_detection_rules {
     [CmdletBinding()]
-     [Alias('Get-PPDMagents')]
+    [Alias('Get-PPDManonDrules')]
     param(
 
         [Parameter(Mandatory = $true, ParameterSetName = 'byID', ValueFromPipelineByPropertyName = $true)]
         $id,
         [Parameter(Mandatory = $false, ParameterSetName = 'all', ValueFromPipelineByPropertyName = $true)]
         $filter,
-        [Parameter(Mandatory = $false, ParameterSetName = 'all', ValueFromPipelineByPropertyName = $true)]
-        [ValidateSet(
-    
-        )]
+        #[Parameter(Mandatory = $false, ParameterSetName = 'all', ValueFromPipelineByPropertyName = $true)]
+        #[ValidateSet(
+    #     )]
         $Type,        
         [Parameter(Mandatory = $false, ParameterSetName = 'all', ValueFromPipelineByPropertyName = $true)]
         $pageSize, 
@@ -21,7 +20,7 @@ function Get-PPDMxxxNoID {
         [Parameter(Mandatory = $false, ValueFromPipelineByPropertyName = $true)]                
         $PPDM_API_BaseUri = $Global:PPDM_API_BaseUri,
         [Parameter(Mandatory = $false, ValueFromPipelineByPropertyName = $true)]
-        $apiver = "/api/v2"
+        $apiver = "/api/v3"
     )
 
     begin {
